@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI PM Toolkit</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <style>
+    .hero { text-align: center; padding: 4rem 1rem 3rem; }
+    .hero h1 { font-size: 2.4rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem; }
+    .hero h1 em { font-style: normal; color: var(--color-accent); }
+    .hero p { font-size: 1.05rem; color: var(--color-text-muted); max-width: 520px; margin: 0 auto 2rem; }
+    .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 1rem; }
+    @media (max-width: 760px) { .tools-grid { grid-template-columns: 1fr; } .hero h1 { font-size: 1.8rem; } }
+    .tool-card { padding: 1.75rem; display: flex; flex-direction: column; }
+    .tool-card-icon { font-size: 1.6rem; margin-bottom: 1rem; }
+    .tool-card h2 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .tool-card p { font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1.25rem; line-height: 1.55; }
+    .section-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-light); margin-bottom: 1.25rem; }
+    .about-section { margin-top: 4rem; max-width: 640px; margin-left: auto; margin-right: auto; text-align: center; }
+    .about-section h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; }
+    .about-section p { font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.7; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">AI PM Toolkit <span>●</span></div>
+    <div class="nav-links">
+      <a href="https://github.com" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <h1>PM tools powered by <em>Claude</em></h1>
+      <p>Three focused tools for product managers — from discovery to prioritization to specification. Powered by Anthropic's Claude API.</p>
+    </div>
+
+    <p class="section-label">Tools</p>
+    <div class="tools-grid">
+      <div class="card tool-card">
+        <div class="tool-card-icon">📄</div>
+        <h2>PRD Generator</h2>
+        <p>Turn a one-line feature idea into a structured Product Requirements Document with problem statement, goals, user stories, and success metrics.</p>
+        <a href="prd-generator.html" class="btn btn-primary">Open Tool →</a>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-card-icon">⚖️</div>
+        <h2>Feature Prioritization</h2>
+        <p>Input your feature backlog and strategic goal. Claude applies RICE scoring and returns a ranked list with explicit reasoning for each decision.</p>
+        <a href="prioritization.html" class="btn btn-primary">Open Tool →</a>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-card-icon">🔬</div>
+        <h2>Research Synthesizer</h2>
+        <p>Paste raw user interview notes or survey responses. Claude extracts themes, pain points, and opportunity areas in a structured research report.</p>
+        <a href="research-synth.html" class="btn btn-primary">Open Tool →</a>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <h2>Built for real PM workflows</h2>
+      <p>This toolkit covers the full product loop: <strong>discovery → prioritization → specification</strong>. Each tool is designed around how PMs actually work — not as a generic AI chatbot, but as a structured assistant for specific, high-value tasks.</p>
+    </div>
+  </main>
+
+  <footer>Built with the <a href="https://anthropic.com" style="color:var(--color-accent)">Claude API</a> · AI PM Toolkit</footer>
+</body>
+</html>
