@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude Tips for PMs · AI PM Toolkit</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <style>
+    .guide-body { max-width: 780px; }
+
+    .decision-block { margin-bottom: 2rem; }
+    .decision-block h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text); }
+    .decision-block .q-number {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 1.6rem; height: 1.6rem; border-radius: 50%;
+      background: var(--color-accent); color: white;
+      font-size: 0.75rem; font-weight: 700; margin-right: 0.5rem;
+      flex-shrink: 0;
+    }
+    .decision-block h3 { display: flex; align-items: center; }
+
+    .options { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+    .options li {
+      display: flex; align-items: baseline; gap: 0.5rem;
+      font-size: 0.9rem; padding: 0.5rem 0.75rem;
+      background: var(--color-bg); border-radius: 8px;
+      border: 1px solid var(--color-border);
+    }
+    .options li .arrow { color: var(--color-text-muted); flex-shrink: 0; }
+    .options li .mechanism {
+      font-weight: 600; color: var(--color-accent);
+      white-space: nowrap;
+    }
+
+    .scenario-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 0.5rem; }
+    .scenario-table th {
+      text-align: left; padding: 0.6rem 0.85rem;
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      font-weight: 600; color: var(--color-text-muted); font-size: 0.78rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .scenario-table td {
+      padding: 0.75rem 0.85rem; border: 1px solid var(--color-border);
+      vertical-align: top; line-height: 1.55;
+    }
+    .scenario-table tr:nth-child(even) td { background: var(--color-bg); }
+    .scenario-table td:nth-child(2) { font-weight: 600; color: var(--color-accent); }
+
+    .scope-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 0.75rem; }
+    @media (max-width: 700px) { .scope-grid { grid-template-columns: 1fr; } }
+
+    .scope-card {
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow);
+    }
+    .scope-card h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--color-text); }
+    .scope-card .scope-path {
+      font-size: 0.75rem; font-family: monospace;
+      color: var(--color-accent); margin-bottom: 0.6rem;
+      background: var(--color-bg); padding: 0.2rem 0.4rem;
+      border-radius: 4px; display: inline-block;
+    }
+    .scope-card p { font-size: 0.825rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; }
+
+    .rule-box {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-left: 3px solid var(--color-accent);
+      border-radius: var(--radius); padding: 1rem 1.25rem;
+      margin-top: 1rem;
+    }
+    .rule-box p { font-size: 0.875rem; color: var(--color-text-muted); margin: 0 0 0.5rem; line-height: 1.6; }
+    .rule-box p:last-child { margin: 0; }
+    .rule-box strong { color: var(--color-text); }
+
+    .guide-section { margin-bottom: 3rem; }
+    .guide-section h2 {
+      font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem;
+      padding-bottom: 0.6rem; border-bottom: 1px solid var(--color-border);
+    }
+
+    .tag {
+      display: inline-block; font-size: 0.7rem; font-weight: 600;
+      padding: 0.15rem 0.5rem; border-radius: 999px;
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      color: var(--color-text-muted); margin-left: 0.4rem; vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">AI PM Toolkit <span style="color:var(--color-accent)">●</span></div>
+    <div class="nav-links">
+      <a href="guide-claude-tips.html" style="color:var(--color-text)">Claude Tips</a>
+      <a href="https://github.com" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <main>
+    <a href="index.html" class="back-link">← Back to tools</a>
+    <div class="tool-header">
+      <h1>Claude Tips for PMs</h1>
+      <p>A practical decision framework for getting the most out of Claude Code — built for product managers preparing for enterprise rollout.</p>
+    </div>
+
+    <div class="guide-body">
+
+      <!-- SECTION 1: Decision Framework -->
+      <div class="guide-section">
+        <h2>The Four Questions</h2>
+        <p style="font-size:0.9rem; color:var(--color-text-muted); margin-bottom:1.5rem; line-height:1.65;">
+          Before setting up any Claude behaviour, run through these four questions in order. They determine the right mechanism every time.
+        </p>
+
+        <div class="decision-block">
+          <h3><span class="q-number">1</span>Does this need to run every time, or only sometimes?</h3>
+          <ul class="options">
+            <li><span class="arrow">→</span><span>Every prompt, automatically</span><span class="mechanism">CLAUDE.md or Hook</span></li>
+            <li><span class="arrow">→</span><span>Only when you say so</span><span class="mechanism">Slash command</span></li>
+            <li><span class="arrow">→</span><span>When the task matches a pattern</span><span class="mechanism">Subagent</span> <span style="font-size:0.8rem;color:var(--color-text-muted)">(main agent decides when)</span></li>
+          </ul>
+        </div>
+
+        <div class="decision-block">
+          <h3><span class="q-number">2</span>Do I need a hard guarantee, or is "the model usually does this" enough?</h3>
+          <ul class="options">
+            <li><span class="arrow">→</span><span>Hard guarantee</span><span class="mechanism">Hook</span></li>
+            <li><span class="arrow">→</span><span>Usually enough</span><span class="mechanism">CLAUDE.md</span></li>
+          </ul>
+        </div>
+
+        <div class="decision-block">
+          <h3><span class="q-number">3</span>Does this task need its own workspace?</h3>
+          <ul class="options">
+            <li><span class="arrow">→</span><span>Yes — lots of intermediate output, or a different role</span><span class="mechanism">Subagent</span></li>
+            <li><span class="arrow">→</span><span>No</span><span class="mechanism">Keep it in the main conversation</span></li>
+          </ul>
+        </div>
+
+        <div class="decision-block">
+          <h3><span class="q-number">4</span>Is this personal to me, or for my team?</h3>
+          <ul class="options">
+            <li><span class="arrow">→</span><span>Personal</span><span class="mechanism">~/.claude/</span> <span style="font-size:0.8rem;color:var(--color-text-muted)">(user-level)</span></li>
+            <li><span class="arrow">→</span><span>Team / project</span><span class="mechanism">&lt;project&gt;/.claude/</span> <span style="font-size:0.8rem;color:var(--color-text-muted)">(committed to the repo)</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SECTION 2: Scenarios -->
+      <div class="guide-section">
+        <h2>Worked Scenarios</h2>
+        <p style="font-size:0.9rem; color:var(--color-text-muted); margin-bottom:1rem; line-height:1.65;">
+          Real situations mapped to the right mechanism — and why.
+        </p>
+        <div style="overflow-x:auto;">
+          <table class="scenario-table">
+            <thead>
+              <tr>
+                <th>Scenario</th>
+                <th>Best mechanism</th>
+                <th>Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Always audit a CSV before computing a metric</td>
+                <td>CLAUDE.md rule + data-auditor subagent</td>
+                <td>The rule belongs everywhere in the project (CLAUDE.md); the audit work is heavy and role-specialised (subagent)</td>
+              </tr>
+              <tr>
+                <td>One-click review of a PRD draft</td>
+                <td>Slash command /prd-review</td>
+                <td>Manual, predictable, shareable with other PMs via the repo</td>
+              </tr>
+              <tr>
+                <td>Three reviewers check every PR — security, metrics impact, rollback plan</td>
+                <td>Three subagents, dispatched in parallel</td>
+                <td>Isolation and parallelism is exactly what subagents are for</td>
+              </tr>
+              <tr>
+                <td>Every session, load our team's current metric definitions</td>
+                <td>SessionStart hook that fetches an internal doc and injects into context</td>
+                <td>External system, must happen every session, enforcement matters</td>
+              </tr>
+              <tr>
+                <td>No one on the team commits payment amounts without the _cents suffix</td>
+                <td>PreToolUse hook on git commit</td>
+                <td>Hard rule, compliance-relevant — hook beats "hope the model remembers"</td>
+              </tr>
+              <tr>
+                <td>Personal habit of asking Claude to summarise the day's git changes</td>
+                <td>User-level slash command ~/.claude/commands/daily.md</td>
+                <td>Personal, manual, doesn't belong in the repo</td>
+              </tr>
+              <tr>
+                <td>The whole org must follow our data-handling policy in every project</td>
+                <td>Shared CLAUDE.md template + shared subagent files, distributed by the platform team</td>
+                <td>Enterprise convention — belongs at project level, versioned</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 3: Scoping -->
+      <div class="guide-section">
+        <h2>The Enterprise Scoping Question</h2>
+        <p style="font-size:0.9rem; color:var(--color-text-muted); margin-bottom:1rem; line-height:1.65;">
+          The same mechanism can live at three scopes. Knowing which is which is critical.
+        </p>
+
+        <div class="scope-grid">
+          <div class="scope-card">
+            <h4>User-level</h4>
+            <span class="scope-path">~/.claude/</span>
+            <p>Your personal settings, invisible to teammates. Private recipes and personal preferences.</p>
+          </div>
+          <div class="scope-card">
+            <h4>Project-level</h4>
+            <span class="scope-path">&lt;repo&gt;/.claude/</span>
+            <p>Committed to the repo — every teammate gets them automatically. This is where team conventions live.</p>
+          </div>
+          <div class="scope-card">
+            <h4>Enterprise-level</h4>
+            <span class="scope-path">managed centrally</span>
+            <p>Deployed by your platform or DevEx team via a shared settings template. Applies across every project.</p>
+          </div>
+        </div>
+
+        <div class="rule-box">
+          <p><strong>Should this apply to everyone?</strong> → Project-level CLAUDE.md or shared subagent.</p>
+          <p><strong>Should teammates feel this rule?</strong> If no → User-level.</p>
+          <p><strong>Does this need to apply outside my team?</strong> → That's a conversation with your platform team about enterprise defaults, not something you set up personally.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>Built with the <a href="https://anthropic.com" style="color:var(--color-accent)">Claude API</a> · AI PM Toolkit</footer>
+</body>
+</html>
