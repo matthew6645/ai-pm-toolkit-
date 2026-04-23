@@ -27,19 +27,38 @@ document.addEventListener('DOMContentLoaded', () => {
   const submitBtn = document.getElementById('submit-btn');
   const outputPanel = document.getElementById('output');
   const copyBtn = document.getElementById('copy-btn');
+  const thinkingToggle = document.getElementById('thinking-toggle');
+  const thinkingCheckbox = document.getElementById('thinking-checkbox');
+  const thinkingPanel = document.getElementById('thinking-panel');
+  const thinkingHeader = document.getElementById('thinking-header');
+  const thinkingBody = document.getElementById('thinking-body');
   let lastOutput = '';
+
+  thinkingToggle.addEventListener('click', () => {
+    thinkingCheckbox.checked = !thinkingCheckbox.checked;
+    thinkingToggle.classList.toggle('active', thinkingCheckbox.checked);
+  });
+
+  thinkingHeader.addEventListener('click', () => {
+    thinkingPanel.classList.toggle('collapsed');
+  });
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const notes = document.getElementById('notes').value.trim();
     const context = document.getElementById('context').value.trim();
+    const thinking = thinkingCheckbox.checked;
 
     if (!notes) return;
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Synthesizing…';
+    submitBtn.textContent = thinking ? 'Thinking deeply…' : 'Synthesizing…';
     outputPanel.className = 'output-panel loading';
     outputPanel.innerHTML = '<div class="spinner"></div> Claude is thinking…';
+    thinkingPanel.style.display = 'none';
+    thinkingBody.textContent = '';
+    thinkingPanel.classList.remove('collapsed');
+    copyBtn.style.display = 'none';
 
     const userMessage = `Research context: ${context || 'not specified'}\n\nRaw notes / responses:\n${notes}`;
 
@@ -47,6 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
       outputPanel.className = 'output-panel';
       const result = await callClaude(RESEARCH_SYSTEM_PROMPT, userMessage, (partial) => {
         outputPanel.innerHTML = marked.parse(partial);
+      }, {
+        thinking,
+        onThinking: thinking ? (partial) => {
+          thinkingPanel.style.display = 'block';
+          thinkingBody.textContent = partial;
+        } : null,
       });
       lastOutput = result;
       copyBtn.style.display = 'inline-flex';

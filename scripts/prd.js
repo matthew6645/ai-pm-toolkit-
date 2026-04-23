@@ -25,20 +25,39 @@ document.addEventListener('DOMContentLoaded', () => {
   const submitBtn = document.getElementById('submit-btn');
   const outputPanel = document.getElementById('output');
   const copyBtn = document.getElementById('copy-btn');
+  const thinkingToggle = document.getElementById('thinking-toggle');
+  const thinkingCheckbox = document.getElementById('thinking-checkbox');
+  const thinkingPanel = document.getElementById('thinking-panel');
+  const thinkingHeader = document.getElementById('thinking-header');
+  const thinkingBody = document.getElementById('thinking-body');
   let lastOutput = '';
+
+  thinkingToggle.addEventListener('click', () => {
+    thinkingCheckbox.checked = !thinkingCheckbox.checked;
+    thinkingToggle.classList.toggle('active', thinkingCheckbox.checked);
+  });
+
+  thinkingHeader.addEventListener('click', () => {
+    thinkingPanel.classList.toggle('collapsed');
+  });
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const idea = document.getElementById('idea').value.trim();
     const users = document.getElementById('users').value.trim();
     const metrics = document.getElementById('metrics').value.trim();
+    const thinking = thinkingCheckbox.checked;
 
     if (!idea) return;
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Generating…';
+    submitBtn.textContent = thinking ? 'Thinking deeply…' : 'Generating…';
     outputPanel.className = 'output-panel loading';
     outputPanel.innerHTML = '<div class="spinner"></div> Claude is thinking…';
+    thinkingPanel.style.display = 'none';
+    thinkingBody.textContent = '';
+    thinkingPanel.classList.remove('collapsed');
+    copyBtn.style.display = 'none';
 
     const userMessage = `Feature idea: ${idea}\nTarget users: ${users || 'not specified'}\nDesired outcome / success signal: ${metrics || 'not specified'}`;
 
@@ -46,6 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
       outputPanel.className = 'output-panel';
       const result = await callClaude(PRD_SYSTEM_PROMPT, userMessage, (partial) => {
         outputPanel.innerHTML = marked.parse(partial);
+      }, {
+        thinking,
+        onThinking: thinking ? (partial) => {
+          thinkingPanel.style.display = 'block';
+          thinkingBody.textContent = partial;
+        } : null,
       });
       lastOutput = result;
       copyBtn.style.display = 'inline-flex';

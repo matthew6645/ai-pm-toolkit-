@@ -26,20 +26,39 @@ document.addEventListener('DOMContentLoaded', () => {
   const submitBtn = document.getElementById('submit-btn');
   const outputPanel = document.getElementById('output');
   const copyBtn = document.getElementById('copy-btn');
+  const thinkingToggle = document.getElementById('thinking-toggle');
+  const thinkingCheckbox = document.getElementById('thinking-checkbox');
+  const thinkingPanel = document.getElementById('thinking-panel');
+  const thinkingHeader = document.getElementById('thinking-header');
+  const thinkingBody = document.getElementById('thinking-body');
   let lastOutput = '';
+
+  thinkingToggle.addEventListener('click', () => {
+    thinkingCheckbox.checked = !thinkingCheckbox.checked;
+    thinkingToggle.classList.toggle('active', thinkingCheckbox.checked);
+  });
+
+  thinkingHeader.addEventListener('click', () => {
+    thinkingPanel.classList.toggle('collapsed');
+  });
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const features = document.getElementById('features').value.trim();
     const goal = document.getElementById('goal').value.trim();
     const constraints = document.getElementById('constraints').value.trim();
+    const thinking = thinkingCheckbox.checked;
 
     if (!features || !goal) return;
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Analyzing…';
+    submitBtn.textContent = thinking ? 'Thinking deeply…' : 'Analyzing…';
     outputPanel.className = 'output-panel loading';
     outputPanel.innerHTML = '<div class="spinner"></div> Claude is thinking…';
+    thinkingPanel.style.display = 'none';
+    thinkingBody.textContent = '';
+    thinkingPanel.classList.remove('collapsed');
+    copyBtn.style.display = 'none';
 
     const userMessage = `Features to prioritize:\n${features}\n\nStrategic goal: ${goal}\n\nConstraints or context: ${constraints || 'none specified'}`;
 
@@ -47,6 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
       outputPanel.className = 'output-panel';
       const result = await callClaude(PRIORITIZATION_SYSTEM_PROMPT, userMessage, (partial) => {
         outputPanel.innerHTML = marked.parse(partial);
+      }, {
+        thinking,
+        onThinking: thinking ? (partial) => {
+          thinkingPanel.style.display = 'block';
+          thinkingBody.textContent = partial;
+        } : null,
       });
       lastOutput = result;
       copyBtn.style.display = 'inline-flex';

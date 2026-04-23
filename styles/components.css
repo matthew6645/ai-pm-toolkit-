@@ -175,3 +175,82 @@ details .details-body {
   float: right;
   margin-top: -0.25rem;
 }
+
+/* Extended Thinking toggle */
+.thinking-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.15s;
+}
+.thinking-toggle:hover { border-color: var(--color-accent); }
+.thinking-toggle.active {
+  background: #eff6ff;
+  border-color: var(--color-accent);
+}
+.thinking-toggle input { display: none; }
+.toggle-track {
+  width: 32px; height: 18px;
+  background: var(--color-border);
+  border-radius: 999px;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.thinking-toggle.active .toggle-track { background: var(--color-accent); }
+.toggle-thumb {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 14px; height: 14px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.thinking-toggle.active .toggle-thumb { transform: translateX(14px); }
+.toggle-label { font-size: 0.8rem; font-weight: 500; color: var(--color-text); }
+.toggle-sub { font-size: 0.72rem; color: var(--color-text-muted); }
+
+/* Thinking panel */
+.thinking-panel {
+  background: #f8faff;
+  border: 1px solid #c7d7f5;
+  border-radius: var(--radius);
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+.thinking-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #3b5fc0;
+  cursor: pointer;
+  background: #eef3ff;
+  border-bottom: 1px solid #c7d7f5;
+  user-select: none;
+}
+.thinking-panel-header .chevron {
+  margin-left: auto;
+  transition: transform 0.2s;
+  font-style: normal;
+}
+.thinking-panel.collapsed .thinking-panel-header .chevron { transform: rotate(-90deg); }
+.thinking-panel-body {
+  padding: 1rem;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: #3d4f7c;
+  white-space: pre-wrap;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.thinking-panel.collapsed .thinking-panel-body { display: none; }

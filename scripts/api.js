@@ -6,11 +6,14 @@ function debounce(fn, ms) {
   };
 }
 
-async function callClaude(systemPrompt, userMessage, onChunk) {
+// options: { thinking: bool, onThinking: fn }
+async function callClaude(systemPrompt, userMessage, onChunk, options = {}) {
+  const { thinking = false, onThinking = null } = options;
+
   const response = await fetch('/api/claude', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ systemPrompt, userMessage }),
+    body: JSON.stringify({ systemPrompt, userMessage, thinking }),
   });
 
   if (!response.ok) {
@@ -21,7 +24,9 @@ async function callClaude(systemPrompt, userMessage, onChunk) {
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   const debouncedChunk = debounce(onChunk, 50);
+  const debouncedThinking = onThinking ? debounce(onThinking, 50) : null;
   let fullText = '';
+  let fullThinking = '';
 
   while (true) {
     const { done, value } = await reader.read();
@@ -33,12 +38,16 @@ async function callClaude(systemPrompt, userMessage, onChunk) {
       const data = line.slice(6);
       if (data === '[DONE]') {
         onChunk(fullText);
+        if (onThinking) onThinking(fullThinking);
         return fullText;
       }
 
       try {
         const parsed = JSON.parse(data);
-        if (parsed.text) {
+        if (parsed.type === 'thinking' && debouncedThinking) {
+          fullThinking += parsed.text;
+          debouncedThinking(fullThinking);
+        } else if (parsed.type === 'text' || parsed.text) {
           fullText += parsed.text;
           debouncedChunk(fullText);
         }

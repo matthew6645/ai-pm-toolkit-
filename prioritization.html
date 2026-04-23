@@ -34,6 +34,16 @@
             <label for="constraints">Constraints <span class="label-hint">— optional</span></label>
             <input type="text" id="constraints" placeholder="e.g. Small team, 6-week sprint, mobile users are 60% of base" />
           </div>
+          <div style="margin-bottom: 1rem;">
+            <label class="thinking-toggle" id="thinking-toggle">
+              <input type="checkbox" id="thinking-checkbox" />
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+              <div>
+                <div class="toggle-label">Extended Thinking</div>
+                <div class="toggle-sub">Claude Sonnet · Slower, deeper reasoning</div>
+              </div>
+            </label>
+          </div>
           <div style="display:flex; gap: 0.75rem; align-items:center;">
             <button type="submit" id="submit-btn" class="btn btn-primary">Prioritize Features</button>
             <button type="button" id="copy-btn" class="btn btn-secondary copy-btn" style="display:none;">Copy</button>
@@ -49,6 +59,13 @@
       </div>
 
       <div>
+        <div id="thinking-panel" class="thinking-panel" style="display:none;">
+          <div class="thinking-panel-header" id="thinking-header">
+            <span>Claude's Reasoning</span>
+            <i class="chevron">▾</i>
+          </div>
+          <div class="thinking-panel-body" id="thinking-body"></div>
+        </div>
         <div id="output" class="output-panel">
           <p class="output-empty">Your prioritized list will appear here.</p>
         </div>
