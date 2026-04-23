@@ -1,3 +1,11 @@
+function debounce(fn, ms) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), ms);
+  };
+}
+
 async function callClaude(systemPrompt, userMessage, onChunk) {
   const response = await fetch('/api/claude', {
     method: 'POST',
@@ -12,6 +20,7 @@ async function callClaude(systemPrompt, userMessage, onChunk) {
 
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
+  const debouncedChunk = debounce(onChunk, 50);
   let fullText = '';
 
   while (true) {
@@ -22,13 +31,16 @@ async function callClaude(systemPrompt, userMessage, onChunk) {
     for (const line of lines) {
       if (!line.startsWith('data: ')) continue;
       const data = line.slice(6);
-      if (data === '[DONE]') return fullText;
+      if (data === '[DONE]') {
+        onChunk(fullText);
+        return fullText;
+      }
 
       try {
         const parsed = JSON.parse(data);
         if (parsed.text) {
           fullText += parsed.text;
-          onChunk(fullText);
+          debouncedChunk(fullText);
         }
       } catch {}
     }
