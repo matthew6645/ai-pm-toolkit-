@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   }
 
   const requestBody = {
-    model: thinking ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001',
+    model: 'claude-sonnet-4-6',
     max_tokens: thinking ? 16000 : 1500,
     stream: true,
     system: systemPrompt,
