@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude for Incident Response · AI PM Toolkit</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <style>
+    .guide-body { max-width: 780px; }
+    .guide-section { margin-bottom: 3rem; }
+    .guide-section h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--color-border); }
+    .guide-section h3 { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 0.6rem; color: var(--color-text); }
+    .guide-section p { font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.7; margin-bottom: 0.85rem; }
+
+    .prompt-block {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-left: 3px solid var(--color-accent);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: var(--color-text);
+      white-space: pre-wrap;
+      font-family: inherit;
+    }
+    .prompt-label {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--color-accent); margin-bottom: 0.5rem;
+    }
+
+    .phase-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
+    @media (max-width: 700px) { .phase-grid { grid-template-columns: 1fr; } }
+    .phase-card {
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      border-radius: var(--radius); padding: 1.1rem; box-shadow: var(--shadow);
+    }
+    .phase-card .phase-num {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--color-accent); margin-bottom: 0.35rem;
+    }
+    .phase-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .phase-card p { font-size: 0.8rem; color: var(--color-text-muted); line-height: 1.55; margin: 0; }
+
+    .warning-box {
+      background: #fff7ed; border: 1px solid #fed7aa;
+      border-radius: var(--radius); padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .warning-box p { font-size: 0.875rem; color: #92400e; margin: 0; line-height: 1.65; }
+    .warning-box strong { color: #78350f; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">AI PM Toolkit <span style="color:var(--color-accent)">●</span></div>
+    <div class="nav-links">
+      <a href="guides.html" style="color:var(--color-text)">Guides</a>
+      <a href="https://github.com" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <main>
+    <a href="guides.html" class="back-link">← Back to guides</a>
+    <div class="tool-header">
+      <h1>Claude for Incident Response</h1>
+      <p>When a payment batch fails, every minute matters. Here's how to use Claude to move faster — from triage to stakeholder comms to post-mortem.</p>
+    </div>
+
+    <div class="guide-body">
+
+      <div class="guide-section">
+        <h2>Where Claude fits in an incident</h2>
+        <p>In a live incident, engineers are focused on the fix. As a PM, your job is communication, coordination, and documentation — and that's exactly where Claude accelerates you. Claude won't fix your Kafka consumer lag, but it will draft a stakeholder update in 30 seconds while you're on the bridge call.</p>
+
+        <div class="phase-grid">
+          <div class="phase-card">
+            <div class="phase-num">Phase 1</div>
+            <h4>Triage</h4>
+            <p>Scope the blast radius. How many payments? Which customers? What's the financial exposure?</p>
+          </div>
+          <div class="phase-card">
+            <div class="phase-num">Phase 2</div>
+            <h4>Communicate</h4>
+            <p>Draft real-time updates for executives, banking partners, and ops teams at the right detail level for each audience.</p>
+          </div>
+          <div class="phase-card">
+            <div class="phase-num">Phase 3</div>
+            <h4>Post-mortem</h4>
+            <p>Structure the timeline, identify root cause, write the corrective action plan with owners and due dates.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h2>Phase 1: Triage prompt</h2>
+        <p>Use this immediately when an incident is declared. Fill in the brackets and paste it to Claude.</p>
+
+        <div class="prompt-label">Triage prompt</div>
+        <div class="prompt-block">We have a live incident on our payment scheduling platform. Help me scope the blast radius and structure my response.
+
+What I know so far:
+- Incident declared: [time]
+- What's failing: [describe the failure — e.g. ACH batch submissions are timing out]
+- First detected by: [monitoring alert / customer complaint / ops team]
+- Payments affected: [estimated number or "unknown"]
+- Rails affected: [ACH / wire / RTP / all]
+- Cut-off time for today's ACH window: [time]
+
+Help me:
+1. Identify the key questions I need answered in the next 15 minutes
+2. Estimate the customer and financial impact based on what I've told you
+3. Identify who needs to be notified and in what order
+4. Flag any regulatory notification obligations I should check (Reg E, banking partner SLAs)</div>
+      </div>
+
+      <div class="guide-section">
+        <h2>Phase 2: Stakeholder communications</h2>
+        <p>Different audiences need different messages. Claude is fast at adapting tone and detail level — give it the facts once and ask for multiple versions.</p>
+
+        <div class="prompt-label">Executive update (for your CTO / Head of Payments)</div>
+        <div class="prompt-block">Write a concise executive update for my CTO. Tone: calm, factual, in control. Length: 5 sentences max.
+
+Facts:
+- [What happened]
+- [When it started and when it was resolved / current status]
+- [Number of payments / customers affected]
+- [Financial exposure estimate]
+- [Root cause — if known]
+- [What we're doing right now]</div>
+
+        <div class="prompt-label">Banking partner update (external-facing)</div>
+        <div class="prompt-block">Write an external incident update for our banking partners. Tone: professional, transparent, no internal jargon. Do not speculate on root cause. Include: what they experienced, current status, next update time.
+
+Facts: [same as above]</div>
+
+        <div class="prompt-label">Ops team update (internal, technical)</div>
+        <div class="prompt-block">Write an internal update for our payments operations team. They need to know: which payment batches are affected, what manual steps (if any) they need to take right now, and what to tell customers who call in. Be specific and actionable.</div>
+      </div>
+
+      <div class="guide-section">
+        <h2>Phase 3: Post-mortem</h2>
+        <p>After the incident is resolved, use Claude to turn raw notes and Slack threads into a structured post-mortem document.</p>
+
+        <div class="prompt-label">Post-mortem prompt</div>
+        <div class="prompt-block">Write a post-mortem document for the following incident. Use this structure: Summary, Timeline, Root Cause, Impact, What Went Well, What Went Wrong, Corrective Actions (with owner and due date for each).
+
+Raw notes / Slack thread:
+[Paste your notes here]
+
+Additional context:
+- Total payments affected: [number]
+- Financial exposure: [amount]
+- Time to detect: [duration]
+- Time to resolve: [duration]
+- Was there a regulatory notification obligation? [yes/no/pending]</div>
+
+        <div class="prompt-label">Corrective action refinement</div>
+        <div class="prompt-block">Here are the corrective actions from our post-mortem. For each one, help me make it more specific and actionable — it should have a clear owner role (not a name), a concrete deliverable, and a realistic due date.
+
+Actions:
+[Paste your draft corrective actions]</div>
+      </div>
+
+      <div class="guide-section">
+        <h2>Important: what NOT to paste into Claude</h2>
+        <div class="warning-box">
+          <p><strong>During an incident, do not paste real customer data, account numbers, routing numbers, or transaction IDs into Claude.</strong> Describe the problem in aggregate terms — number of payments affected, dollar ranges, failure codes — rather than sharing individual payment records. Check your company's AI usage policy before your first incident; knowing the rules in advance means you won't have to think about it when the pressure is on.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>Built with the <a href="https://anthropic.com" style="color:var(--color-accent)">Claude API</a> · AI PM Toolkit</footer>
+</body>
+</html>

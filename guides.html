@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guides · AI PM Toolkit</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <style>
+    .guides-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin-top: 1rem; }
+    @media (max-width: 700px) { .guides-grid { grid-template-columns: 1fr; } }
+    .guide-card { padding: 1.75rem; display: flex; flex-direction: column; }
+    .guide-card-icon { font-size: 1.6rem; margin-bottom: 1rem; }
+    .guide-card h2 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .guide-card p { font-size: 0.875rem; color: var(--color-text-muted); flex: 1; margin-bottom: 1.25rem; line-height: 1.55; }
+    .section-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-light); margin-bottom: 1.25rem; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">AI PM Toolkit <span style="color:var(--color-accent)">●</span></div>
+    <div class="nav-links">
+      <a href="guides.html" style="color:var(--color-text)">Guides</a>
+      <a href="https://github.com" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <main>
+    <a href="index.html" class="back-link">← Back to tools</a>
+    <div class="tool-header">
+      <h1>Guides</h1>
+      <p>Practical guides for product managers getting the most out of Claude — built for enterprise teams preparing for rollout.</p>
+    </div>
+
+    <p class="section-label">Claude for PMs</p>
+    <div class="guides-grid">
+      <div class="card guide-card">
+        <div class="guide-card-icon">🧭</div>
+        <h2>Claude Tips for PMs</h2>
+        <p>The four-question decision framework for choosing between hooks, slash commands, subagents, and CLAUDE.md. Includes worked scenarios and enterprise scoping rules.</p>
+        <a href="guide-claude-tips.html" class="btn btn-primary">Read Guide →</a>
+      </div>
+      <div class="card guide-card">
+        <div class="guide-card-icon">💳</div>
+        <h2>Prompting Claude for Payments</h2>
+        <p>How to give Claude the financial domain context it needs to think like a payments expert — not a generic assistant. Built for teams running payment rails and scheduling platforms.</p>
+        <a href="guide-payments-prompting.html" class="btn btn-primary">Read Guide →</a>
+      </div>
+      <div class="card guide-card">
+        <div class="guide-card-icon">🚨</div>
+        <h2>Claude for Incident Response</h2>
+        <p>When a payment batch fails, Claude can help you triage, draft stakeholder comms, and structure a post-mortem fast. Templates and prompts for high-severity incidents.</p>
+        <a href="guide-incident-response.html" class="btn btn-primary">Read Guide →</a>
+      </div>
+      <div class="card guide-card">
+        <div class="guide-card-icon">📋</div>
+        <h2>Claude for Regulatory &amp; Compliance Docs</h2>
+        <p>Writing BRDs, risk assessments, and compliance narratives faster without sacrificing the precision regulators expect. Prompt patterns for financial services.</p>
+        <a href="guide-compliance-docs.html" class="btn btn-primary">Read Guide →</a>
+      </div>
+      <div class="card guide-card">
+        <div class="guide-card-icon">🚀</div>
+        <h2>Latest Claude Releases</h2>
+        <p>A live summary of Claude's latest models, features, and capabilities — streamed fresh from Claude itself on every page load.</p>
+        <a href="guide-releases.html" class="btn btn-primary">Read Guide →</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>Built with the <a href="https://anthropic.com" style="color:var(--color-accent)">Claude API</a> · AI PM Toolkit</footer>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prompting Claude for Payments · AI PM Toolkit</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <style>
+    .guide-body { max-width: 780px; }
+    .guide-section { margin-bottom: 3rem; }
+    .guide-section h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--color-border); }
+    .guide-section h3 { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 0.6rem; }
+    .guide-section p { font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.7; margin-bottom: 0.85rem; }
+
+    .prompt-block {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-left: 3px solid var(--color-accent);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: var(--color-text);
+      white-space: pre-wrap;
+      font-family: inherit;
+    }
+    .prompt-label {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--color-accent);
+      margin-bottom: 0.5rem;
+    }
+    .vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+    @media (max-width: 600px) { .vs-grid { grid-template-columns: 1fr; } }
+    .vs-card { border-radius: var(--radius); padding: 1rem 1.1rem; font-size: 0.875rem; line-height: 1.65; }
+    .vs-card.bad { background: #fff5f5; border: 1px solid #fecaca; }
+    .vs-card.good { background: #f0fdf4; border: 1px solid #86efac; }
+    .vs-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; }
+    .vs-card.bad .vs-label { color: #dc2626; }
+    .vs-card.good .vs-label { color: #16a34a; }
+
+    .tip-box {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      box-shadow: var(--shadow);
+    }
+    .tip-box p { margin: 0; font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.65; }
+    .tip-box strong { color: var(--color-text); }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">AI PM Toolkit <span style="color:var(--color-accent)">●</span></div>
+    <div class="nav-links">
+      <a href="guides.html" style="color:var(--color-text)">Guides</a>
+      <a href="https://github.com" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <main>
+    <a href="guides.html" class="back-link">← Back to guides</a>
+    <div class="tool-header">
+      <h1>Prompting Claude for Payments</h1>
+      <p>How to give Claude the financial domain context it needs — so it thinks like a payments expert, not a generic assistant.</p>
+    </div>
+
+    <div class="guide-body">
+
+      <div class="guide-section">
+        <h2>Why context is everything in payments</h2>
+        <p>Claude is a generalist. Without domain context, it will give you generalist answers — vague PRDs, generic risk lists, and success metrics that have nothing to do with how payment systems actually work.</p>
+        <p>A payment scheduling platform has specific constraints that Claude won't assume: settlement windows, cut-off times, payment rail differences (ACH vs wire vs RTP), idempotency requirements, regulatory obligations, and the reality that a bug doesn't affect one user — it can affect every scheduled payment in a batch.</p>
+        <p>The fix is simple: front-load your prompts with context. Treat Claude like a smart new hire on your team who needs to be briefed before they can help you.</p>
+      </div>
+
+      <div class="guide-section">
+        <h2>The context block</h2>
+        <p>Start any important prompt with a context block that establishes your platform, your constraints, and your stakes. You can keep this saved and paste it in at the start of each session.</p>
+        <div class="prompt-label">Reusable context block</div>
+        <div class="prompt-block">You are helping a Product Manager at a financial institution. My platform is a Scheduling Payments Back-End that processes over $110B in payments annually and powers banking customer experiences.
+
+Key domain constraints you should always factor in:
+- Payments run on ACH, wire, and RTP rails — each has different cut-off times, settlement speeds, and failure modes
+- Scheduling windows are time-critical: missing a cut-off means a payment settles the next business day
+- Failures are not isolated — they affect batches, which can mean thousands of customer payments at once
+- Every change must consider idempotency, auditability, and regulatory compliance (NACHA rules, Reg E)
+- Our Kafka streams carry payment messages; Snowflake is our analytics layer
+
+With this context, please help me with the following:</div>
+
+        <p>Paste this at the top of any prompt and Claude will reason within your world rather than against a generic mental model of "software."</p>
+      </div>
+
+      <div class="guide-section">
+        <h2>Weak vs strong prompts — side by side</h2>
+
+        <h3>Writing a PRD</h3>
+        <div class="vs-grid">
+          <div class="vs-card bad">
+            <div class="vs-label">Weak</div>
+            Write a PRD for a retry feature for failed payments.
+          </div>
+          <div class="vs-card good">
+            <div class="vs-label">Strong</div>
+            Write a PRD for an intelligent payment retry feature. Context: we process ACH batch payments. When a payment fails (NSF, invalid account), we need to retry — but retry logic must respect NACHA same-day ACH cut-off windows, avoid duplicate submissions (idempotency), and log every retry attempt for audit. Success metric: reduce manual re-submission by ops team by 70%.
+          </div>
+        </div>
+
+        <h3>Prioritizing features</h3>
+        <div class="vs-grid">
+          <div class="vs-card bad">
+            <div class="vs-label">Weak</div>
+            Prioritize these features: real-time notifications, bulk scheduling, payment status API, holiday calendar.
+          </div>
+          <div class="vs-card good">
+            <div class="vs-label">Strong</div>
+            Prioritize these features for our payment scheduling platform: real-time notifications, bulk scheduling, payment status API, holiday calendar. Our Q2 goal is to reduce settlement failures by 25%. We have a 3-engineer team and a 6-week sprint. Holiday calendar is a compliance requirement for NACHA — treat it as a constraint, not a feature to score.
+          </div>
+        </div>
+
+        <h3>Synthesizing research</h3>
+        <div class="vs-grid">
+          <div class="vs-card bad">
+            <div class="vs-label">Weak</div>
+            Here are my user interview notes. Summarize the themes.
+          </div>
+          <div class="vs-card good">
+            <div class="vs-label">Strong</div>
+            Here are notes from 8 interviews with bank operations staff who use our payment scheduling dashboard daily. They are not technical users — they do not understand ACH rails but they are expert at spotting patterns in payment failures. Synthesize the key themes, pain points, and opportunity areas. Flag anything that could indicate a compliance or audit risk.
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h2>Four rules for payments prompts</h2>
+
+        <h3>1. Name your rail</h3>
+        <p>ACH, wire, RTP, and card payments have fundamentally different latency, reversibility, and failure characteristics. Always specify which rail you're discussing. A retry strategy for ACH is completely different from one for RTP.</p>
+
+        <h3>2. Anchor to the financial impact</h3>
+        <p>Instead of "users are frustrated," say "a missed cut-off affects the entire batch — potentially thousands of payments and millions of dollars held until next settlement." Stakes help Claude calibrate the weight of a recommendation.</p>
+
+        <h3>3. State the compliance constraint upfront</h3>
+        <p>If NACHA rules, Reg E, or an audit requirement shapes your decision space, say so at the start of the prompt — not at the end. Claude will reason around it from the beginning rather than having to revise after the fact.</p>
+
+        <h3>4. Tell Claude what you're NOT changing</h3>
+        <p>Payment platforms have sacred constraints — the core scheduling engine, the Kafka message contract, the Snowflake schema. If something is off limits, say so explicitly. "Assume the Kafka message schema is fixed and cannot change in this sprint."</p>
+      </div>
+
+      <div class="guide-section">
+        <h2>Useful prompt starters for your platform</h2>
+
+        <div class="prompt-label">For a post-incident PRD</div>
+        <div class="prompt-block">We had an incident where [describe what happened]. It affected [X] payments totalling [$ amount]. Write a PRD for the feature that would have prevented this or reduced its impact. Focus on detection speed, blast radius reduction, and auditability.</div>
+
+        <div class="prompt-label">For a Snowflake query explanation</div>
+        <div class="prompt-block">I'm querying our payment scheduling data in Snowflake. Here are the results: [paste data]. Help me interpret what this tells us about [settlement failure rates / scheduling patterns / retry success]. Flag anything that looks anomalous for a platform processing $110B/year.</div>
+
+        <div class="prompt-label">For stakeholder comms about a delay</div>
+        <div class="prompt-block">A feature we committed to for Q2 needs to slip by 3 weeks due to [reason]. Write a concise stakeholder update for our banking partners. Tone: transparent but confident. Include: what slipped, why, revised timeline, and what we're doing to prevent recurrence. Do not use jargon — the audience is business, not technical.</div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>Built with the <a href="https://anthropic.com" style="color:var(--color-accent)">Claude API</a> · AI PM Toolkit</footer>
+</body>
+</html>

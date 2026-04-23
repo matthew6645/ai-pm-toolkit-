@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude for Regulatory &amp; Compliance Docs · AI PM Toolkit</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <style>
+    .guide-body { max-width: 780px; }
+    .guide-section { margin-bottom: 3rem; }
+    .guide-section h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--color-border); }
+    .guide-section h3 { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 0.6rem; }
+    .guide-section p { font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.7; margin-bottom: 0.85rem; }
+
+    .prompt-block {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-left: 3px solid var(--color-accent);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: var(--color-text);
+      white-space: pre-wrap;
+      font-family: inherit;
+    }
+    .prompt-label {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--color-accent); margin-bottom: 0.5rem;
+    }
+
+    .doc-type-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1rem 0; }
+    @media (max-width: 600px) { .doc-type-grid { grid-template-columns: 1fr; } }
+    .doc-type-card {
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      border-radius: var(--radius); padding: 1.1rem; box-shadow: var(--shadow);
+    }
+    .doc-type-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .doc-type-card p { font-size: 0.8rem; color: var(--color-text-muted); line-height: 1.55; margin: 0; }
+
+    .rule-box {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-left: 3px solid var(--color-accent);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem; margin: 1rem 0;
+    }
+    .rule-box p { font-size: 0.875rem; color: var(--color-text-muted); margin: 0 0 0.5rem; line-height: 1.65; }
+    .rule-box p:last-child { margin: 0; }
+    .rule-box strong { color: var(--color-text); }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">AI PM Toolkit <span style="color:var(--color-accent)">●</span></div>
+    <div class="nav-links">
+      <a href="guides.html" style="color:var(--color-text)">Guides</a>
+      <a href="https://github.com" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <main>
+    <a href="guides.html" class="back-link">← Back to guides</a>
+    <div class="tool-header">
+      <h1>Claude for Regulatory &amp; Compliance Docs</h1>
+      <p>How to use Claude to draft financial services documentation faster — without sacrificing the precision that regulators and auditors expect.</p>
+    </div>
+
+    <div class="guide-body">
+
+      <div class="guide-section">
+        <h2>Where Claude adds the most value</h2>
+        <p>Compliance documentation is slow not because the thinking is hard, but because the writing is. You know what needs to be said — getting it into the right structure, tone, and level of specificity takes time. Claude excels at exactly this translation problem.</p>
+
+        <div class="doc-type-grid">
+          <div class="doc-type-card">
+            <h4>Business Requirements Documents</h4>
+            <p>Turning feature ideas and regulatory mandates into structured BRDs with clear functional requirements, assumptions, and out-of-scope items.</p>
+          </div>
+          <div class="doc-type-card">
+            <h4>Risk Assessments</h4>
+            <p>Drafting risk narratives, inherent vs. residual risk ratings, and control descriptions for new payment features.</p>
+          </div>
+          <div class="doc-type-card">
+            <h4>Regulatory Change Impact Analysis</h4>
+            <p>Translating a regulatory update (e.g. NACHA rule change) into a structured impact assessment for your platform.</p>
+          </div>
+          <div class="doc-type-card">
+            <h4>Audit Evidence Narratives</h4>
+            <p>Writing clear explanations of how a control works, who owns it, and where the evidence lives — in plain English for auditors.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h2>Writing a BRD</h2>
+        <p>Give Claude the business context, the regulatory driver, and the constraints. Let it structure the document — then you review and tighten.</p>
+
+        <div class="prompt-label">BRD prompt</div>
+        <div class="prompt-block">Write a Business Requirements Document for the following feature on our payment scheduling platform. Use this structure: Executive Summary, Business Objective, Regulatory Driver (if applicable), Functional Requirements (numbered), Non-Functional Requirements, Assumptions, Out of Scope, Open Questions.
+
+Feature: [describe the feature]
+Regulatory driver: [e.g. NACHA Same Day ACH rule change effective March 2025 / Reg E error resolution requirement / internal audit finding]
+Constraints: [e.g. must not change the Kafka message schema / must be completed before Q3 audit window / no changes to the core scheduling engine]
+Stakeholders: [e.g. Payments Ops, Compliance, Engineering, Banking Partners]
+
+Tone: formal, precise. This will be reviewed by compliance and engineering leads. Avoid vague language — every requirement should be testable.</div>
+      </div>
+
+      <div class="guide-section">
+        <h2>Writing a risk assessment</h2>
+        <p>Risk assessments require you to think systematically about what could go wrong. Claude is useful for making sure you haven't missed a risk category — and for writing the narrative clearly.</p>
+
+        <div class="prompt-label">Risk assessment prompt</div>
+        <div class="prompt-block">Write a risk assessment for the following change to our payment scheduling platform. For each risk identified, include: Risk Description, Likelihood (High / Medium / Low), Impact (High / Medium / Low), Inherent Risk Rating, Mitigating Controls, Residual Risk Rating.
+
+Change: [describe what is being changed]
+Platform context: We process $110B+ annually in scheduled payments across ACH and wire rails. A failure can affect entire payment batches.
+
+Risk categories to assess (cover all of these):
+- Operational risk (processing failures, batch errors)
+- Compliance / regulatory risk (NACHA rules, Reg E)
+- Financial risk (customer financial harm, exposure)
+- Reputational risk (banking partner trust, customer experience)
+- Technology / data risk (data integrity, Kafka message failures, Snowflake data accuracy)
+
+After the table, write a one-paragraph risk summary for the executive sign-off section.</div>
+      </div>
+
+      <div class="guide-section">
+        <h2>Analysing a regulatory change</h2>
+        <p>When NACHA, the Fed, or your regulator releases a rule update, the first question is always: does this affect us and how? Claude can help you structure that analysis quickly.</p>
+
+        <div class="prompt-label">Regulatory change impact prompt</div>
+        <div class="prompt-block">Analyse the impact of the following regulatory change on our payment scheduling platform.
+
+Regulatory change: [paste the key text or summarise the rule change]
+Effective date: [date]
+
+Our platform context:
+- We schedule ACH and wire payments for banking customers
+- We process batches through [describe your submission process]
+- Our cut-off times are [describe]
+- We use Kafka for payment message routing and Snowflake for reporting
+
+Please provide:
+1. A plain-English summary of what the rule requires
+2. Specific changes required to our platform (if any)
+3. Changes required to our operational processes
+4. Changes required to customer-facing communications
+5. Timeline recommendation — what needs to be done before the effective date
+6. Open questions we need to answer with our compliance team</div>
+      </div>
+
+      <div class="guide-section">
+        <h2>Writing audit evidence narratives</h2>
+        <p>Auditors ask: "How does this control work?" PMs often know the answer but struggle to write it in a way that is clear, testable, and free of engineering jargon. Claude is good at this translation.</p>
+
+        <div class="prompt-label">Audit narrative prompt</div>
+        <div class="prompt-block">Write an audit evidence narrative for the following control. The audience is an internal or external auditor who understands financial services but is not an engineer.
+
+Control: [describe the control, e.g. "All payment submissions are logged with a unique idempotency key to prevent duplicate processing"]
+How it works technically: [describe in plain terms how the system implements this]
+Where the evidence lives: [e.g. Snowflake table name / log system / dashboard]
+Who owns the control: [role, not name]
+How often it is tested: [frequency]
+
+The narrative should be 2-3 paragraphs: what the control does, how it is implemented, and how it is evidenced.</div>
+      </div>
+
+      <div class="guide-section">
+        <h2>Three rules for compliance writing with Claude</h2>
+
+        <div class="rule-box">
+          <p><strong>Always review before submitting.</strong> Claude produces well-structured drafts, not final documents. Every compliance doc needs a human review — especially requirement numbering, regulatory citations, and risk ratings, which Claude may approximate.</p>
+          <p><strong>Give Claude the regulation text, not your summary of it.</strong> If you're writing to a specific NACHA rule or Reg E provision, paste the actual rule text into the prompt. Claude will reason more precisely against the source than against your paraphrase.</p>
+          <p><strong>Ask Claude to flag its assumptions.</strong> Add "At the end, list any assumptions you made that a compliance reviewer should verify" to any compliance prompt. This surfaces gaps you need to close before the document is final.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>Built with the <a href="https://anthropic.com" style="color:var(--color-accent)">Claude API</a> · AI PM Toolkit</footer>
+</body>
+</html>
