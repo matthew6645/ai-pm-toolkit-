@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deck Builder · AI PM Toolkit</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+  <style>
+    /* ── Form panel ── */
+    .deck-layout { display: grid; grid-template-columns: 380px 1fr; gap: 1.5rem; align-items: start; }
+    @media (max-width: 900px) { .deck-layout { grid-template-columns: 1fr; } }
+
+    .form-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); position: sticky; top: 72px; }
+
+    .slide-count-row { display: flex; gap: 0.5rem; margin-top: 0.35rem; }
+    .slide-count-btn {
+      flex: 1; padding: 0.45rem 0; border: 1px solid var(--color-border);
+      border-radius: 6px; background: var(--color-surface); font-size: 0.85rem;
+      font-weight: 500; cursor: pointer; text-align: center; color: var(--color-text-muted);
+      transition: all 0.15s; font-family: inherit;
+    }
+    .slide-count-btn.selected { background: var(--color-accent); border-color: var(--color-accent); color: white; }
+
+    /* ── Slide preview ── */
+    .preview-area { min-height: 400px; }
+    .preview-empty {
+      background: var(--color-bg); border: 2px dashed var(--color-border);
+      border-radius: var(--radius); min-height: 420px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: var(--color-text-light); font-size: 0.9rem; gap: 0.75rem;
+    }
+    .preview-empty-icon { font-size: 2.5rem; }
+
+    .generating-state {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-radius: var(--radius); min-height: 420px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 1rem; color: var(--color-text-muted); font-size: 0.9rem;
+    }
+    .gen-dots { display: flex; gap: 6px; }
+    .gen-dots span {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--color-accent); animation: bounce 1.2s infinite;
+    }
+    .gen-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .gen-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-8px)} }
+
+    /* ── Slide viewer ── */
+    .slide-viewer { display: none; }
+    .slide-viewer.visible { display: block; }
+
+    .slide-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+    .slide-nav-btn {
+      width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--color-border);
+      background: var(--color-surface); cursor: pointer; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s; color: var(--color-text);
+    }
+    .slide-nav-btn:hover:not(:disabled) { border-color: var(--color-accent); color: var(--color-accent); }
+    .slide-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .slide-counter { font-size: 0.8rem; color: var(--color-text-muted); font-weight: 500; }
+
+    /* ── Slide canvas (16:9) ── */
+    .slide-canvas-wrap { position: relative; width: 100%; padding-bottom: 56.25%; border-radius: 8px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.15); }
+    .slide-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    /* ── Slide types ── */
+    .slide { width: 100%; height: 100%; display: flex; flex-direction: column; font-family: 'Inter', sans-serif; }
+
+    /* Title slide */
+    .slide-title-type { background: #002147; color: white; padding: 8% 10%; justify-content: center; position: relative; overflow: hidden; }
+    .slide-title-type::before {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 4px; background: linear-gradient(90deg, #0078D4, #00C4FF);
+    }
+    .slide-title-type::after {
+      content: ''; position: absolute; top: -60px; right: -60px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: rgba(0,120,212,0.1);
+    }
+    .slide-title-eyebrow { font-size: 1.1%; letter-spacing: 0.2em; text-transform: uppercase; color: #7AB3D4; margin-bottom: 4%; font-weight: 600; font-size: clamp(8px, 1.4%, 12px); }
+    .slide-title-heading { font-size: clamp(16px, 4%, 36px); font-weight: 700; line-height: 1.2; margin-bottom: 4%; }
+    .slide-title-sub { font-size: clamp(9px, 1.6%, 15px); color: #9BBDD4; line-height: 1.5; max-width: 80%; }
+    .slide-title-meta { position: absolute; bottom: 6%; left: 10%; font-size: clamp(7px, 1.1%, 11px); color: #5A8DAA; }
+
+    /* Header bar shared */
+    .slide-header { background: #002147; color: white; padding: 3% 5% 2.5%; flex-shrink: 0; }
+    .slide-header-title { font-size: clamp(10px, 1.8%, 17px); font-weight: 700; line-height: 1.3; }
+    .slide-body { flex: 1; padding: 3% 5%; display: flex; flex-direction: column; background: white; overflow: hidden; }
+
+    /* Exec summary */
+    .slide-keymsg {
+      background: #EEF4FB; border-left: 3px solid #0078D4;
+      padding: 2% 3%; border-radius: 4px; margin-bottom: 3%;
+      font-size: clamp(8px, 1.4%, 13px); font-weight: 600; color: #002147;
+      line-height: 1.4; flex-shrink: 0;
+    }
+    .slide-bullets { list-style: none; padding: 0; margin: 0; flex: 1; overflow: hidden; }
+    .slide-bullets li {
+      display: flex; gap: 2%; align-items: flex-start;
+      font-size: clamp(7px, 1.25%, 12px); color: #333;
+      line-height: 1.5; margin-bottom: 1.5%;
+    }
+    .slide-bullets li::before { content: '▸'; color: #0078D4; flex-shrink: 0; margin-top: 0.1em; }
+
+    /* Next steps */
+    .actions-grid { display: grid; gap: 2%; flex: 1; overflow: hidden; }
+    .action-item {
+      display: grid; grid-template-columns: 1fr auto auto;
+      gap: 3%; align-items: center;
+      padding: 2% 3%; background: #F8FAFC;
+      border: 1px solid #E2E8F0; border-radius: 4px;
+      font-size: clamp(7px, 1.2%, 11px);
+    }
+    .action-text { font-weight: 500; color: #002147; line-height: 1.3; }
+    .action-tag {
+      padding: 1% 2.5%; border-radius: 999px; font-size: clamp(6px, 1%, 9px);
+      font-weight: 600; white-space: nowrap;
+    }
+    .action-tag.owner { background: #EEF4FB; color: #0078D4; }
+    .action-tag.timeline { background: #F0FDF4; color: #166534; }
+
+    /* Slide number */
+    .slide-number {
+      position: absolute; bottom: 2%; right: 3%;
+      font-size: clamp(6px, 0.9%, 9px); color: #CBD5E1; font-weight: 600;
+    }
+
+    /* ── Thumbnails ── */
+    .slide-thumbs { display: flex; gap: 0.5rem; margin-top: 0.75rem; overflow-x: auto; padding-bottom: 4px; }
+    .slide-thumb {
+      flex-shrink: 0; width: 80px; height: 45px; border-radius: 4px;
+      border: 2px solid transparent; cursor: pointer; overflow: hidden;
+      transition: border-color 0.15s; background: #eee;
+    }
+    .slide-thumb.active { border-color: var(--color-accent); }
+    .slide-thumb iframe, .slide-thumb .thumb-inner { width: 100%; height: 100%; pointer-events: none; }
+
+    /* ── Export bar ── */
+    .export-bar {
+      display: none; margin-top: 1.25rem;
+      padding: 1rem 1.25rem;
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+      display: none; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    }
+    .export-bar.visible { display: flex; }
+    .export-bar-info { font-size: 0.8rem; color: var(--color-text-muted); line-height: 1.5; }
+    .export-bar-info strong { color: var(--color-text); display: block; margin-bottom: 0.15rem; }
+    .export-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">AI PM Toolkit <span style="color:var(--color-accent)">●</span></div>
+    <div class="nav-links">
+      <a href="guides.html">Guides</a>
+      <a href="https://github.com" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <main>
+    <a href="index.html" class="back-link">← Back to tools</a>
+    <div class="tool-header">
+      <h1>Deck Builder</h1>
+      <p>McKinsey · Bain · BCG style executive presentations — generated by Claude, exported to Google Slides.</p>
+    </div>
+
+    <div class="deck-layout">
+
+      <!-- Form -->
+      <div class="form-card">
+        <form id="deck-form">
+          <div class="form-group">
+            <label for="situation">Situation <span class="label-hint">— what's the context?</span></label>
+            <textarea id="situation" rows="3" placeholder="e.g. Our ACH payment scheduling platform is approaching capacity. We process $110B annually and volumes are growing 30% YoY." required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="objective">Objective <span class="label-hint">— what decision needs to be made?</span></label>
+            <textarea id="objective" rows="2" placeholder="e.g. Secure executive approval for a $2M infrastructure investment to scale payment processing capacity." required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="audience">Audience <span class="label-hint">— who is in the room?</span></label>
+            <input type="text" id="audience" placeholder="e.g. CFO, CTO, Head of Payments — all C-suite, data-driven" />
+          </div>
+          <div class="form-group">
+            <label for="data">Key data / evidence <span class="label-hint">— what facts should the deck use?</span></label>
+            <textarea id="data" rows="3" placeholder="e.g. Current capacity: 2M payments/day. Projected peak: 3.2M by Q4. Downtime cost: $850K per incident. Three incidents last quarter."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Number of slides</label>
+            <div class="slide-count-row">
+              <button type="button" class="slide-count-btn" data-count="5">5</button>
+              <button type="button" class="slide-count-btn selected" data-count="7">7</button>
+              <button type="button" class="slide-count-btn" data-count="9">9</button>
+              <button type="button" class="slide-count-btn" data-count="12">12</button>
+            </div>
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <label class="thinking-toggle" id="thinking-toggle">
+              <input type="checkbox" id="thinking-checkbox" checked />
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+              <div>
+                <div class="toggle-label">Extended Thinking</div>
+                <div class="toggle-sub">Recommended for executive decks</div>
+              </div>
+            </label>
+          </div>
+          <button type="submit" id="submit-btn" class="btn btn-primary" style="width:100%;">Build Deck</button>
+        </form>
+      </div>
+
+      <!-- Preview -->
+      <div class="preview-area">
+
+        <!-- Thinking panel -->
+        <div id="thinking-panel" class="thinking-panel" style="display:none; margin-bottom: 0.75rem;">
+          <div class="thinking-panel-header" id="thinking-header">
+            <span>Claude's Reasoning</span>
+            <i class="chevron">▾</i>
+          </div>
+          <div class="thinking-panel-body" id="thinking-body"></div>
+        </div>
+
+        <!-- Empty state -->
+        <div id="preview-empty" class="preview-empty">
+          <div class="preview-empty-icon">🗂️</div>
+          <div>Your deck will appear here</div>
+          <div style="font-size:0.78rem; max-width: 280px; text-align:center; line-height:1.5;">Fill in the brief on the left and click Build Deck. Each slide follows the Pyramid Principle — conclusion first.</div>
+        </div>
+
+        <!-- Generating state -->
+        <div id="generating-state" class="generating-state" style="display:none;">
+          <div class="gen-dots"><span></span><span></span><span></span></div>
+          <div id="gen-status">Claude is structuring your deck…</div>
+        </div>
+
+        <!-- Slide viewer -->
+        <div id="slide-viewer" class="slide-viewer">
+          <div class="slide-nav">
+            <button class="slide-nav-btn" id="prev-btn" disabled>←</button>
+            <span class="slide-counter" id="slide-counter">Slide 1 of 7</span>
+            <button class="slide-nav-btn" id="next-btn">→</button>
+          </div>
+          <div class="slide-canvas-wrap">
+            <div class="slide-canvas" id="slide-canvas"></div>
+          </div>
+          <div class="slide-thumbs" id="slide-thumbs"></div>
+        </div>
+
+        <!-- Export bar -->
+        <div class="export-bar" id="export-bar">
+          <div class="export-bar-info">
+            <strong>Ready to export</strong>
+            Download as .pptx · Opens directly in Google Slides (File → Import slides)
+          </div>
+          <div class="export-actions">
+            <button class="btn btn-secondary" id="rebuild-btn">Rebuild</button>
+            <button class="btn btn-primary" id="export-btn">Download .pptx</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>Built with the <a href="https://anthropic.com" style="color:var(--color-accent)">Claude API</a> · AI PM Toolkit</footer>
+
+  <script src="scripts/api.js"></script>
+  <script src="scripts/deck.js"></script>
+</body>
+</html>
