@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { systemPrompt, userMessage, thinking } = req.body;
+  const { systemPrompt, userMessage, thinking, model: modelOverride } = req.body;
 
   if (!systemPrompt || !userMessage) {
     return res.status(400).json({ error: 'Missing systemPrompt or userMessage' });
@@ -15,8 +15,8 @@ export default async function handler(req, res) {
   }
 
   const requestBody = {
-    model: 'claude-sonnet-4-6',
-    max_tokens: thinking ? 16000 : 1500,
+    model: modelOverride || (thinking ? 'claude-sonnet-4-6' : 'claude-haiku-4-5-20251001'),
+    max_tokens: (modelOverride || thinking) ? 16000 : 1500,
     stream: true,
     system: systemPrompt,
     messages: [{ role: 'user', content: userMessage }],

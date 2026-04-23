@@ -129,6 +129,7 @@ Produce exactly ${selectedCount} slides following the schema. Remember: titles m
       charCount = partial.length;
       document.getElementById('gen-status').textContent = `Structuring slides… (${charCount} chars)`;
     }, {
+      model: 'claude-sonnet-4-6',
       thinking,
       onThinking: thinking ? (partial) => {
         thinkingPanel.style.display = 'block';

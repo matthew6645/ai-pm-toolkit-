@@ -6,14 +6,14 @@ function debounce(fn, ms) {
   };
 }
 
-// options: { thinking: bool, onThinking: fn }
+// options: { thinking: bool, onThinking: fn, model: string }
 async function callClaude(systemPrompt, userMessage, onChunk, options = {}) {
-  const { thinking = false, onThinking = null } = options;
+  const { thinking = false, onThinking = null, model = null } = options;
 
   const response = await fetch('/api/claude', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ systemPrompt, userMessage, thinking }),
+    body: JSON.stringify({ systemPrompt, userMessage, thinking, ...(model && { model }) }),
   });
 
   if (!response.ok) {
