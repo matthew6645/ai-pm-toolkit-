@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
       copyBtn.style.display = 'inline-flex';
     } catch (err) {
       outputPanel.className = 'output-panel';
-      outputPanel.innerHTML = `<div class="error-msg">Error: ${err.message}. Check your API key in config.js.</div>`;
+      outputPanel.innerHTML = `<div class="error-msg">Error: ${err.message}</div>`;
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Synthesize Research';
