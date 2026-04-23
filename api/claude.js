@@ -24,6 +24,7 @@ export default async function handler(req, res) {
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 1500,
+      stream: true,
       system: systemPrompt,
       messages: [{ role: 'user', content: userMessage }],
     }),
@@ -34,6 +35,29 @@ export default async function handler(req, res) {
     return res.status(upstream.status).json({ error: err?.error?.message || `Claude API error ${upstream.status}` });
   }
 
-  const data = await upstream.json();
-  res.status(200).json({ text: data.content[0].text });
+  // Set SSE headers so the browser receives a stream
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+
+  // Forward each chunk from Anthropic to the browser
+  const decoder = new TextDecoder();
+  for await (const chunk of upstream.body) {
+    const lines = decoder.decode(chunk).split('\n');
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const data = line.slice(6);
+      if (data === '[DONE]') break;
+
+      try {
+        const parsed = JSON.parse(data);
+        if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
+          res.write(`data: ${JSON.stringify({ text: parsed.delta.text })}\n\n`);
+        }
+      } catch {}
+    }
+  }
+
+  res.write('data: [DONE]\n\n');
+  res.end();
 }

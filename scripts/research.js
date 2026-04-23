@@ -44,10 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const userMessage = `Research context: ${context || 'not specified'}\n\nRaw notes / responses:\n${notes}`;
 
     try {
-      const result = await callClaude(RESEARCH_SYSTEM_PROMPT, userMessage);
-      lastOutput = result;
       outputPanel.className = 'output-panel';
-      outputPanel.innerHTML = marked.parse(result);
+      const result = await callClaude(RESEARCH_SYSTEM_PROMPT, userMessage, (partial) => {
+        outputPanel.innerHTML = marked.parse(partial);
+      });
+      lastOutput = result;
       copyBtn.style.display = 'inline-flex';
     } catch (err) {
       outputPanel.className = 'output-panel';

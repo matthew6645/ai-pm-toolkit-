@@ -43,10 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const userMessage = `Feature idea: ${idea}\nTarget users: ${users || 'not specified'}\nDesired outcome / success signal: ${metrics || 'not specified'}`;
 
     try {
-      const result = await callClaude(PRD_SYSTEM_PROMPT, userMessage);
-      lastOutput = result;
       outputPanel.className = 'output-panel';
-      outputPanel.innerHTML = marked.parse(result);
+      const result = await callClaude(PRD_SYSTEM_PROMPT, userMessage, (partial) => {
+        outputPanel.innerHTML = marked.parse(partial);
+      });
+      lastOutput = result;
       copyBtn.style.display = 'inline-flex';
     } catch (err) {
       outputPanel.className = 'output-panel';
