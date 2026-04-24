@@ -1,7 +1,7 @@
 .btn {
   --btn-x: 50%;
   --btn-y: 50%;
-  --btn-ripple-color: rgba(255, 255, 255, 0.35);
+  --btn-ripple-color: rgba(255, 255, 255, 0.6);
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -17,24 +17,24 @@
   font-family: inherit;
   will-change: transform;
   transition:
-    background-color 150ms ease,
-    color 150ms ease,
-    box-shadow 220ms cubic-bezier(0.34, 1.56, 0.64, 1),
-    transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 .btn:active:not(:disabled) {
-  transform: translateY(0) scale(0.97);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  transform: translateY(1px) scale(0.92);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
   transition:
-    background-color 80ms ease,
-    transform 80ms ease,
-    box-shadow 80ms ease;
+    background-color 70ms ease,
+    transform 70ms ease,
+    box-shadow 70ms ease;
 }
 
 .btn:focus-visible {
@@ -58,13 +58,13 @@
 }
 
 .btn.is-rippling::after {
-  animation: btn-ripple 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: btn-ripple 620ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes btn-ripple {
-  0%   { width: 0; height: 0; opacity: 0.6; }
-  60%  { opacity: 0.35; }
-  100% { width: 320%; height: 320%; opacity: 0; }
+  0%   { width: 0; height: 0; opacity: 0.75; }
+  50%  { opacity: 0.55; }
+  100% { width: 520%; height: 520%; opacity: 0; }
 }
 
 .btn-primary {
@@ -72,7 +72,10 @@
   color: white;
 }
 
-.btn-primary:hover:not(:disabled) { background: var(--color-accent-hover); }
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.4), 0 3px 8px rgba(37, 99, 235, 0.22);
+}
 
 .btn-primary:disabled {
   opacity: 0.6;
@@ -80,13 +83,16 @@
 }
 
 .btn-secondary {
-  --btn-ripple-color: rgba(37, 99, 235, 0.18);
+  --btn-ripple-color: rgba(37, 99, 235, 0.32);
   background: var(--color-surface);
   color: var(--color-text);
   border: 1px solid var(--color-border);
 }
 
-.btn-secondary:hover { background: var(--color-bg); }
+.btn-secondary:hover {
+  background: var(--color-bg);
+  border-color: var(--color-accent);
+}
 
 @media (prefers-reduced-motion: reduce) {
   .btn,
