@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MCP Connectors for PMs · AI PM Toolkit</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <style>
+    .guide-body { max-width: 780px; }
+
+    .decision-block { margin-bottom: 2rem; }
+    .decision-block h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text); }
+    .decision-block .q-number {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 1.6rem; height: 1.6rem; border-radius: 50%;
+      background: var(--color-accent); color: white;
+      font-size: 0.75rem; font-weight: 700; margin-right: 0.5rem;
+      flex-shrink: 0;
+    }
+    .decision-block h3 { display: flex; align-items: center; }
+    .decision-block p.step-detail {
+      font-size: 0.875rem; color: var(--color-text-muted);
+      margin-left: 2.1rem; line-height: 1.6;
+    }
+
+    .options { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+    .options li {
+      display: flex; align-items: baseline; gap: 0.5rem;
+      font-size: 0.9rem; padding: 0.5rem 0.75rem;
+      background: var(--color-bg); border-radius: 8px;
+      border: 1px solid var(--color-border);
+    }
+    .options li .arrow { color: var(--color-text-muted); flex-shrink: 0; }
+    .options li .mechanism {
+      font-weight: 600; color: var(--color-accent);
+      white-space: nowrap;
+    }
+
+    .scenario-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 0.5rem; }
+    .scenario-table th {
+      text-align: left; padding: 0.6rem 0.85rem;
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      font-weight: 600; color: var(--color-text-muted); font-size: 0.78rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .scenario-table td {
+      padding: 0.75rem 0.85rem; border: 1px solid var(--color-border);
+      vertical-align: top; line-height: 1.55;
+    }
+    .scenario-table tr:nth-child(even) td { background: var(--color-bg); }
+    .scenario-table td:nth-child(2) { font-weight: 600; color: var(--color-accent); }
+
+    .scope-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 0.75rem; }
+    @media (max-width: 700px) { .scope-grid { grid-template-columns: 1fr; } }
+
+    .scope-card {
+      background: var(--color-surface); border: 1px solid var(--color-border);
+      border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow);
+    }
+    .scope-card h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--color-text); }
+    .scope-card .scope-path {
+      font-size: 0.75rem; font-family: monospace;
+      color: var(--color-accent); margin-bottom: 0.6rem;
+      background: var(--color-bg); padding: 0.2rem 0.4rem;
+      border-radius: 4px; display: inline-block;
+    }
+    .scope-card p { font-size: 0.825rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; }
+
+    .rule-box {
+      background: var(--color-bg); border: 1px solid var(--color-border);
+      border-left: 3px solid var(--color-accent);
+      border-radius: var(--radius); padding: 1rem 1.25rem;
+      margin-top: 1rem;
+    }
+    .rule-box p { font-size: 0.875rem; color: var(--color-text-muted); margin: 0 0 0.5rem; line-height: 1.6; }
+    .rule-box p:last-child { margin: 0; }
+    .rule-box strong { color: var(--color-text); }
+
+    .guide-section { margin-bottom: 3rem; }
+    .guide-section h2 {
+      font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem;
+      padding-bottom: 0.6rem; border-bottom: 1px solid var(--color-border);
+    }
+    .guide-section h3.sub {
+      font-size: 1rem; font-weight: 600;
+      margin-top: 1.5rem; margin-bottom: 0.75rem; color: var(--color-text);
+    }
+    .guide-section p.lede {
+      font-size: 0.9rem; color: var(--color-text-muted);
+      margin-bottom: 1rem; line-height: 1.65;
+    }
+    .guide-section ol.numbered {
+      font-size: 0.9rem; color: var(--color-text-muted);
+      line-height: 1.7; padding-left: 1.25rem;
+    }
+    .guide-section ol.numbered strong { color: var(--color-text); }
+
+    code.inline {
+      font-family: monospace; font-size: 0.82rem;
+      background: var(--color-bg); padding: 0.1rem 0.35rem;
+      border-radius: 4px; border: 1px solid var(--color-border);
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">AI PM Toolkit <span style="color:var(--color-accent)">●</span></div>
+    <div class="nav-links">
+      <a href="guides.html" style="color:var(--color-text)">Guides</a>
+      <a href="https://github.com" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <main>
+    <a href="guides.html" class="back-link">← Back to guides</a>
+    <div class="tool-header">
+      <h1>MCP Connectors for PMs</h1>
+      <p>How Claude reaches out to your company's systems — and when to wire one up, use an approved one, or leave it alone. Built for PMs getting enterprise Claude access.</p>
+    </div>
+
+    <div class="guide-body">
+
+      <!-- SECTION 1: What MCP Is -->
+      <div class="guide-section">
+        <h2>What MCP Actually Is</h2>
+        <p class="lede">
+          MCP (Model Context Protocol) is a plug-in system that lets Claude talk to external services — Jira, GitHub, Google Drive, Snowflake, Slack, Confluence, your internal tools. Each service exposes an "MCP server" with a set of actions Claude can call as tools.
+        </p>
+        <p class="lede">
+          Think of it as a driver pack for Claude. Without the Jira MCP connector, Claude doesn't know Jira exists. With it, Claude gets tools like <code class="inline">jira_search_issues</code> and <code class="inline">jira_update_issue_status</code> — just like how it has <code class="inline">Read</code> and <code class="inline">Bash</code> built in.
+        </p>
+
+        <h3 class="sub">The three connection styles you'll encounter</h3>
+        <div style="overflow-x:auto;">
+          <table class="scenario-table">
+            <thead>
+              <tr>
+                <th>Style</th>
+                <th>How it works</th>
+                <th>Typical example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Stdio (local)</td>
+                <td>Claude spawns a local process on your laptop</td>
+                <td>A Python script wrapping a REST API you run locally</td>
+              </tr>
+              <tr>
+                <td>HTTP / SSE (remote)</td>
+                <td>Claude talks to a server over HTTPS</td>
+                <td>An internal MCP your company hosts for a metric catalog</td>
+              </tr>
+              <tr>
+                <td>Hosted OAuth connector</td>
+                <td>Vendor-managed; you click "Authorize"</td>
+                <td>The official Atlassian / GitHub / Google Drive connectors</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="rule-box">
+          <p><strong>For a PM on Day 1:</strong> you'll almost always be in OAuth-connector territory. Stdio comes up only if a teammate ships a local wrapper. Self-hosted HTTP MCPs are usually built and deployed by your platform team.</p>
+        </div>
+      </div>
+
+      <!-- SECTION 2: Three Layers -->
+      <div class="guide-section">
+        <h2>Three Layers at Your Company</h2>
+        <p class="lede">
+          MCP configuration lives at three scopes. Know which layer you operate at before touching anything.
+        </p>
+
+        <div class="scope-grid">
+          <div class="scope-card">
+            <h4>Enterprise admin</h4>
+            <span class="scope-path">approved catalog</span>
+            <p>Your platform / IT team maintains a vetted list of MCP servers. This is how your company prevents unvetted connectors from exfiltrating data. Find out who owns the list and what's on it.</p>
+          </div>
+          <div class="scope-card">
+            <h4>Project</h4>
+            <span class="scope-path">.mcp.json</span>
+            <p>A repo-level file declaring which MCP servers the project needs. Teammates approve them when they first open Claude Code in the folder.</p>
+          </div>
+          <div class="scope-card">
+            <h4>Personal</h4>
+            <span class="scope-path">~/.claude/</span>
+            <p>Your own machine only. Add via <code class="inline">claude mcp add</code> or user settings. Personal productivity connectors no one else should see.</p>
+          </div>
+        </div>
+
+        <div class="rule-box">
+          <p><strong>Own a project?</strong> → Decide which MCPs belong in <code class="inline">.mcp.json</code>.</p>
+          <p><strong>Personal productivity?</strong> → User-level — don't pollute the team config.</p>
+          <p><strong>Company-wide policy?</strong> → That's an enterprise-admin conversation, not a PM setup task.</p>
+        </div>
+      </div>
+
+      <!-- SECTION 3: Day-1 Playbook -->
+      <div class="guide-section">
+        <h2>Day-1 Playbook</h2>
+        <p class="lede">
+          What to actually do in your first week of enterprise access.
+        </p>
+
+        <div class="decision-block">
+          <h3><span class="q-number">1</span>Ask your admin for the approved connector list</h3>
+          <p class="step-detail">Save it. That list <em>is</em> your toolbox. Most PMs are surprised how many connectors their company has already whitelisted.</p>
+        </div>
+
+        <div class="decision-block">
+          <h3><span class="q-number">2</span>Connect the 2–3 you'll actually use</h3>
+          <p class="step-detail">For a payments PM that's likely Jira, Confluence, and your Snowflake / BI connector if one exists. Resist the urge to connect everything.</p>
+        </div>
+
+        <div class="decision-block">
+          <h3><span class="q-number">3</span>Test each one in a sandbox session</h3>
+          <p class="step-detail">Ask something simple like <em>"list my assigned Jira tickets this sprint"</em>. You want to know each connector works before you build workflows on top of it.</p>
+        </div>
+
+        <div class="decision-block">
+          <h3><span class="q-number">4</span>Don't chase every connector</h3>
+          <p class="step-detail">MCPs cost context budget. Ten connected servers means every prompt sees ten tool menus. Keep your stack to what you actively use.</p>
+        </div>
+      </div>
+
+      <!-- SECTION 4: Building Your Own -->
+      <div class="guide-section">
+        <h2>Building Your Own MCP</h2>
+        <p class="lede">
+          The honest answer has tiers. Here's what it actually takes.
+        </p>
+
+        <div style="overflow-x:auto;">
+          <table class="scenario-table">
+            <thead>
+              <tr>
+                <th>Tier</th>
+                <th>Example</th>
+                <th>Effort</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Toy — one tool, wraps one REST endpoint</td>
+                <td>get_weather(city) → JSON</td>
+                <td>1–2 hrs for a dev · a weekend for a motivated PM</td>
+              </tr>
+              <tr>
+                <td>Useful — a few tools, one service, error handling</td>
+                <td>Wrap your internal feature-flag API: list / read / toggle</td>
+                <td>1 day for a dev · 2–4 days for a PM with an LLM helper</td>
+              </tr>
+              <tr>
+                <td>Production — many tools, auth, pagination, tests</td>
+                <td>Full internal ticketing system with 20 actions</td>
+                <td>1–2 weeks; partner with an engineer</td>
+              </tr>
+              <tr>
+                <td>Polished platform — multi-tenant, observability, versioned</td>
+                <td>Company-wide Snowflake MCP for all analysts</td>
+                <td>Multiple engineer-weeks; don't solo this</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub">What an MCP mechanically is</h3>
+        <p class="lede">
+          A program (any language) that speaks the Model Context Protocol — a JSON-RPC dialect — and exposes two things:
+        </p>
+        <ol class="numbered">
+          <li><strong>Tool definitions</strong> — a list of callable actions with JSON schemas for their inputs.</li>
+          <li><strong>Tool handlers</strong> — the code that runs when Claude calls a tool.</li>
+        </ol>
+        <p class="lede" style="margin-top:1rem;">
+          Anthropic ships SDKs in Python and TypeScript that handle the protocol plumbing for you. You just write the tools. A functioning stdio MCP can be ~30 lines of Python.
+        </p>
+
+        <div class="rule-box">
+          <p><strong>The realistic PM scenario</strong> isn't hand-writing a production MCP. It's (1) writing the PRD for an internal MCP your engineers build, (2) prototyping a toy on your laptop to prove a concept, or (3) evaluating community MCPs before your team adopts one. All three are high-leverage PM work; solo-coding a production MCP usually isn't.</p>
+        </div>
+      </div>
+
+      <!-- SECTION 5: Gotchas -->
+      <div class="guide-section">
+        <h2>Gotchas Every PM Should Know</h2>
+        <p class="lede">
+          These aren't theoretical. They're the ones that actually bite teams adopting MCP.
+        </p>
+
+        <div style="overflow-x:auto;">
+          <table class="scenario-table">
+            <thead>
+              <tr>
+                <th>Gotcha</th>
+                <th>Severity</th>
+                <th>Why it matters</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Prompt injection via tool output</td>
+                <td>High</td>
+                <td>If your MCP returns data from Jira and someone wrote malicious instructions in a comment, those become text Claude might follow. A real risk, not a theoretical one.</td>
+              </tr>
+              <tr>
+                <td>Scope creep</td>
+                <td>Medium</td>
+                <td>Easy to add 30 tools to one MCP. Every tool is context budget. Fewer, richer tools beat many narrow ones.</td>
+              </tr>
+              <tr>
+                <td>Auth boundary</td>
+                <td>High</td>
+                <td>A local MCP runs with <em>your</em> credentials. If Claude is tricked into calling a destructive action, it runs as you. Restrict scopes at the connector level.</td>
+              </tr>
+              <tr>
+                <td>Data egress</td>
+                <td>High</td>
+                <td>Remote MCPs send data to an external server. Every new remote server needs intentional security review, not a one-click approval.</td>
+              </tr>
+              <tr>
+                <td>Versioning drift</td>
+                <td>Medium</td>
+                <td>Tool schemas change; saved workflows break silently. Pin versions where the server supports it.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 6: Should I Build It -->
+      <div class="guide-section">
+        <h2>The "Should I Build It" Decision</h2>
+        <p class="lede">
+          Three questions, in order. If you answer yes at any step, stop.
+        </p>
+
+        <div class="decision-block">
+          <h3><span class="q-number">1</span>Does this already exist as an approved connector?</h3>
+          <ul class="options">
+            <li><span class="arrow">→</span><span>Yes</span><span class="mechanism">Use it</span> <span style="font-size:0.8rem;color:var(--color-text-muted)">don't rebuild</span></li>
+          </ul>
+        </div>
+
+        <div class="decision-block">
+          <h3><span class="q-number">2</span>Is this a one-person wrapper around a simple REST API?</h3>
+          <ul class="options">
+            <li><span class="arrow">→</span><span>Yes</span><span class="mechanism">Build a toy</span> <span style="font-size:0.8rem;color:var(--color-text-muted)">pitch the productionised version once proven</span></li>
+          </ul>
+        </div>
+
+        <div class="decision-block">
+          <h3><span class="q-number">3</span>Is this a system the whole company depends on?</h3>
+          <ul class="options">
+            <li><span class="arrow">→</span><span>Yes</span><span class="mechanism">Platform-engineering ask</span> <span style="font-size:0.8rem;color:var(--color-text-muted)">not a PM solo project</span></li>
+          </ul>
+        </div>
+
+        <div class="rule-box">
+          <p><strong>The enterprise-specific advice:</strong> when your access arrives, the most valuable thing you can do in week 1 isn't build anything. It's <em>map the MCP surface</em> — what connectors are enabled, what data each reaches, who owns each, and what's on the roadmap. That document alone makes you one of the more Claude-fluent PMs in your org, because most people start by poking at features instead of understanding the boundaries.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>Built with the <a href="https://anthropic.com" style="color:var(--color-accent)">Claude API</a> · AI PM Toolkit</footer>
+</body>
+</html>
