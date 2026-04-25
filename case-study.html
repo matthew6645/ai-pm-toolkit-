@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Case Study · Built with Claude Code · AI PM Toolkit</title>
+  <meta name="description" content="A PM's case study on building this site with Claude Code — the workflow, three product calls I'm proud of, and three I'd do differently." />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="AI PM Toolkit" />
+  <meta property="og:title" content="Case Study: Built with Claude Code" />
+  <meta property="og:description" content="A PM's notes on building this site with Claude Code — workflow, product decisions, and what I'd do differently." />
+  <meta property="og:url" content="https://ai-pm-toolkit-gules.vercel.app/case-study" />
+  <meta property="og:image" content="https://ai-pm-toolkit-gules.vercel.app/favicon.svg" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <script src="scripts/button-fx.js" defer></script>
+  <style>
+    .cs-body { max-width: 720px; margin: 2.5rem auto 4rem; padding: 0 1.25rem; }
+    .cs-kicker { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent); margin-bottom: 0.75rem; }
+    .cs-body h1 { font-size: 2rem; font-weight: 700; line-height: 1.2; margin-bottom: 0.5rem; }
+    .cs-deck { font-size: 1.05rem; color: var(--color-text-muted); margin-bottom: 2.5rem; line-height: 1.6; }
+    .cs-body h2 { font-size: 1.25rem; font-weight: 700; margin: 3rem 0 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--color-border); }
+    .cs-body p { font-size: 1rem; line-height: 1.75; margin-bottom: 1.1rem; color: var(--color-text); }
+    .cs-body ul { padding-left: 1.25rem; margin-bottom: 1.1rem; }
+    .cs-body ul li { font-size: 1rem; line-height: 1.7; margin-bottom: 0.6rem; }
+    .cs-stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin: 1.5rem 0 2rem; }
+    @media (max-width: 600px) { .cs-stat-row { grid-template-columns: repeat(2, 1fr); } }
+    .cs-stat { padding: 1rem; text-align: center; }
+    .cs-stat .num { font-size: 1.5rem; font-weight: 700; color: var(--color-accent); display: block; }
+    .cs-stat .label { font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; }
+    .cs-pillar { margin: 1.5rem 0; padding: 1.25rem 1.5rem; border-left: 3px solid var(--color-accent); background: var(--color-surface); border-radius: 0 var(--radius) var(--radius) 0; }
+    .cs-pillar h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .cs-pillar p { font-size: 0.95rem; margin-bottom: 0; line-height: 1.65; }
+    .cs-cta { margin-top: 3rem; padding: 1.75rem; text-align: center; }
+    .cs-cta p { font-size: 0.95rem; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand"><a href="index.html" style="text-decoration:none;color:inherit;">AI PM Toolkit <span style="color:var(--color-accent)">●</span></a></div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="guides.html">Guides</a>
+      <a href="about.html">About</a>
+      <a href="https://github.com/matthew6645/ai-pm-toolkit-" target="_blank">GitHub</a>
+    </div>
+  </nav>
+
+  <main class="cs-body">
+    <p class="cs-kicker">Case Study · April 2026</p>
+    <h1>I built this site with Claude Code. Here's what I learned.</h1>
+    <p class="cs-deck">A PM's notes on the workflow, the product calls I'm proud of, and the ones I'd revisit.</p>
+
+    <div class="cs-stat-row">
+      <div class="card cs-stat"><span class="num">5</span><span class="label">Tools shipped</span></div>
+      <div class="card cs-stat"><span class="num">7</span><span class="label">Guides published</span></div>
+      <div class="card cs-stat"><span class="num">~2</span><span class="label">Months elapsed</span></div>
+      <div class="card cs-stat"><span class="num">0</span><span class="label">Frameworks used</span></div>
+    </div>
+
+    <h2>Why I built it</h2>
+    <p>My company is rolling out Claude Code to engineering, and PMs are next. I had two options: wait for the rollout and learn it in flight, or learn it now by building something I'd actually use. I picked the second.</p>
+    <p>The brief I gave myself: ship a small set of focused PM tools that I'd reach for in my own work — not a "look what AI can do" demo, but something I could put in front of another PM and have them say "I'd actually use this."</p>
+
+    <h2>How I worked with Claude Code</h2>
+    <p>I treated each tool like a small product, not a prompt. Same loop every time:</p>
+    <ul>
+      <li><strong>Spec first.</strong> A short brief — what's the input, what's the output, what's the failure mode. Even one paragraph forces clarity.</li>
+      <li><strong>Branch per change.</strong> Every tool, every guide, every animation tweak got its own PR. No mixing concerns.</li>
+      <li><strong>Vercel preview before merge.</strong> If I couldn't click through it on a real URL, I didn't merge it.</li>
+      <li><strong>Ship fast, edit later.</strong> A live preview I can react to is more useful than a perfect spec I'm still arguing with myself about.</li>
+    </ul>
+
+    <h2>Three product calls I'm proud of</h2>
+
+    <div class="cs-pillar">
+      <h3>Streaming over batched responses</h3>
+      <p>Every tool renders Claude's output as it arrives, not after the full response. PMs iterate in real time — waiting 20 seconds for a wall of text breaks flow. The 50ms render debounce was a later add to keep the rendering smooth.</p>
+    </div>
+
+    <div class="cs-pillar">
+      <h3>Conclusion-first decks</h3>
+      <p>The Deck Builder forces consulting-style structure: lead with the recommendation, defend it after. Most PM decks build up to the ask. That's wrong for executive review, and it's the easiest thing to fix with a structured prompt.</p>
+    </div>
+
+    <div class="cs-pillar">
+      <h3>No framework, no lock-in</h3>
+      <p>The whole site is vanilla HTML/CSS/JS plus one Vercel serverless function. No React, no build step, no node_modules in the repo. Anyone can fork it, read it end-to-end in an afternoon, and run it themselves. Frameworks would have been faster to start, slower to share.</p>
+    </div>
+
+    <h2>Three things I'd do differently</h2>
+    <ul>
+      <li><strong>Set up a shared component pattern earlier.</strong> Each tool reinvented its own form, output panel, and copy button. By tool 3 I was repeating CSS I'd already written. A small components file from day 1 would have saved hours.</li>
+      <li><strong>Add analytics from the start.</strong> I have no idea which tool gets used most, where people drop off, or whether the guides actually get read. Without data, my prioritization is guesswork.</li>
+      <li><strong>Treat copy as a deliverable, not a placeholder.</strong> I shipped tool descriptions written in generic "AI tool for X" voice and only fixed them later. Voice is part of the product, not polish.</li>
+    </ul>
+
+    <h2>What I learned about working with AI as a PM</h2>
+    <ul>
+      <li><strong>Specs matter more, not less.</strong> A vague prompt produces vague output, fast. The leverage is in writing the brief — the implementation is cheap.</li>
+      <li><strong>Code review is the new design review.</strong> Reading what Claude wrote — and asking for changes — is where the product judgment happens. Skipping that step ships AI-flavored slop.</li>
+      <li><strong>Iteration speed beats first-draft quality.</strong> Five rounds on a small change beats one round on a perfect change. Vercel previews on every PR made that loop fast enough to actually use.</li>
+    </ul>
+
+    <div class="card cs-cta">
+      <p>Rolling out Claude Code at your company? I'd love to compare notes.</p>
+      <a href="https://www.linkedin.com/in/matthew-whytepm/" target="_blank" class="btn btn-primary">Connect on LinkedIn →</a>
+    </div>
+  </main>
+
+  <footer>
+    Built by <a href="https://www.linkedin.com/in/matthew-whytepm/" target="_blank" style="color:var(--color-accent)">Matthew Whyte</a> · Powered by the <a href="https://anthropic.com" style="color:var(--color-accent)">Claude API</a>
+  </footer>
+</body>
+</html>
