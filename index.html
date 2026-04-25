@@ -3,7 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI PM Toolkit</title>
+  <title>AI PM Toolkit — Claude-powered PM tools</title>
+  <meta name="description" content="5 focused tools for product managers, built by a payments PM prepping for Claude Code rollout. Shared with other PMs doing the same." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="AI PM Toolkit" />
+  <meta property="og:title" content="AI PM Toolkit — Claude-powered PM tools" />
+  <meta property="og:description" content="5 focused tools for product managers, built by a payments PM prepping for Claude Code rollout. Shared with other PMs doing the same." />
+  <meta property="og:url" content="https://ai-pm-toolkit-gules.vercel.app/" />
+  <meta property="og:image" content="https://ai-pm-toolkit-gules.vercel.app/favicon.svg" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles/main.css" />
   <link rel="stylesheet" href="styles/components.css" />
   <script src="scripts/button-fx.js" defer></script>
@@ -22,12 +31,20 @@
     .about-section { margin-top: 4rem; max-width: 640px; margin-left: auto; margin-right: auto; text-align: center; }
     .about-section h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; }
     .about-section p { font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.7; }
+    .roadmap { margin-top: 4rem; max-width: 720px; margin-left: auto; margin-right: auto; }
+    .roadmap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    @media (max-width: 700px) { .roadmap-grid { grid-template-columns: 1fr; } }
+    .roadmap-card { padding: 1.25rem; }
+    .roadmap-card .stage { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent); margin-bottom: 0.4rem; }
+    .roadmap-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; line-height: 1.35; }
+    .roadmap-card p { font-size: 0.825rem; color: var(--color-text-muted); line-height: 1.6; }
   </style>
 </head>
 <body>
   <nav>
-    <div class="nav-brand">AI PM Toolkit <span>●</span></div>
+    <div class="nav-brand"><a href="index.html" style="text-decoration:none;color:inherit;">AI PM Toolkit <span>●</span></a></div>
     <div class="nav-links">
+      <a href="index.html">Home</a>
       <a href="guides.html">Guides</a>
       <a href="about.html">About</a>
       <a href="https://github.com/matthew6645/ai-pm-toolkit-" target="_blank">GitHub</a>
@@ -71,6 +88,27 @@
         <h2>Deck Builder</h2>
         <p>McKinsey · Bain · BCG style executive presentations built by Claude. Conclusion-first structure, live slide preview, and one-click export to Google Slides.</p>
         <a href="deck-builder.html" class="btn btn-primary">Open Tool →</a>
+      </div>
+    </div>
+
+    <div class="roadmap">
+      <p class="section-label">Now / Next · April 2026</p>
+      <div class="roadmap-grid">
+        <div class="card roadmap-card">
+          <p class="stage">Shipped</p>
+          <h3>5 tools, 6 guides, About page</h3>
+          <p>Discovery, prioritization, specification, executive presentations — plus a growing guides library for PMs new to Claude Code.</p>
+        </div>
+        <div class="card roadmap-card">
+          <p class="stage">In progress</p>
+          <h3>MCP Connectors guide</h3>
+          <p>How Claude talks to Jira, Snowflake, and GitHub via the Model Context Protocol — the Day-1 playbook for enterprise PMs.</p>
+        </div>
+        <div class="card roadmap-card">
+          <p class="stage">Next</p>
+          <h3>Claude Code onboarding path for PMs</h3>
+          <p>A guided walkthrough for PMs joining a team that already uses Claude Code — the "first 30 days" playbook.</p>
+        </div>
       </div>
     </div>
 

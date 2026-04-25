@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Deck Builder · AI PM Toolkit</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles/main.css" />
   <link rel="stylesheet" href="styles/components.css" />
   <script src="scripts/button-fx.js" defer></script>
@@ -159,10 +160,12 @@
 </head>
 <body>
   <nav>
-    <div class="nav-brand">AI PM Toolkit <span style="color:var(--color-accent)">●</span></div>
+    <div class="nav-brand"><a href="index.html" style="text-decoration:none;color:inherit;">AI PM Toolkit <span style="color:var(--color-accent)">●</span></a></div>
     <div class="nav-links">
+      <a href="index.html">Home</a>
       <a href="guides.html">Guides</a>
-      <a href="https://github.com" target="_blank">GitHub</a>
+      <a href="about.html">About</a>
+      <a href="https://github.com/matthew6645/ai-pm-toolkit-" target="_blank">GitHub</a>
     </div>
   </nav>
 
@@ -269,9 +272,20 @@
 
       </div>
     </div>
+
+    <section style="margin: 4rem auto 1rem; max-width: 720px;">
+      <p class="section-label">What I chose and why</p>
+      <div class="card" style="padding: 1.75rem;">
+        <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.9rem; font-size: 0.92rem; line-height: 1.65;">
+          <li><strong>Conclusion-first structure.</strong> The deck forces you to lead with the recommendation, the way consulting decks do — not the narrative buildup most product decks default to.</li>
+          <li><strong>Live preview while Claude drafts.</strong> Slides render as they generate, so you can spot a wrong angle in slide 2 instead of waiting for slide 14.</li>
+          <li><strong>Browser-only export to PowerPoint.</strong> Uses pptxgenjs client-side — no server, no upload, no IT-approval blockers when an exec needs the deck in 30 minutes.</li>
+        </ul>
+      </div>
+    </section>
   </main>
 
-  <footer>Built with the <a href="https://anthropic.com" style="color:var(--color-accent)">Claude API</a> · AI PM Toolkit</footer>
+  <footer>Built by <a href="https://www.linkedin.com/in/matthew-whytepm/" target="_blank" style="color:var(--color-accent)">Matthew Whyte</a> · Powered by the <a href="https://anthropic.com" style="color:var(--color-accent)">Claude API</a></footer>
 
   <script src="scripts/api.js"></script>
   <script src="scripts/deck.js"></script>
