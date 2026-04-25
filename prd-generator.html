@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PRD Generator · AI PM Toolkit</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles/main.css" />
   <link rel="stylesheet" href="styles/components.css" />
   <script src="scripts/button-fx.js" defer></script>
@@ -11,7 +12,13 @@
 </head>
 <body>
   <nav>
-    <div class="nav-brand">AI PM Toolkit <span style="color:var(--color-accent)">●</span></div>
+    <div class="nav-brand"><a href="index.html" style="text-decoration:none;color:inherit;">AI PM Toolkit <span style="color:var(--color-accent)">●</span></a></div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="guides.html">Guides</a>
+      <a href="about.html">About</a>
+      <a href="https://github.com/matthew6645/ai-pm-toolkit-" target="_blank">GitHub</a>
+    </div>
   </nav>
   <main>
     <a href="index.html" class="back-link">← Back to tools</a>
@@ -72,8 +79,19 @@
         </div>
       </div>
     </div>
+
+    <section style="margin: 4rem auto 1rem; max-width: 720px;">
+      <p class="section-label">What I chose and why</p>
+      <div class="card" style="padding: 1.75rem;">
+        <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.9rem; font-size: 0.92rem; line-height: 1.65;">
+          <li><strong>Streaming over batched.</strong> The PRD renders section-by-section as Claude writes — waiting on a full response breaks the iteration loop.</li>
+          <li><strong>Structured sections, not prose.</strong> Fixed slots (problem, goals, user stories, metrics) hand off cleanly to eng. A wall of text always needs reformatting before sharing.</li>
+          <li><strong>One-line input, full PRD out.</strong> No 10-field form. When the idea is still fuzzy, the friction of a long form kills iteration speed.</li>
+        </ul>
+      </div>
+    </section>
   </main>
-  <footer>Built with the <a href="https://anthropic.com" style="color:var(--color-accent)">Claude API</a> · AI PM Toolkit</footer>
+  <footer>Built by <a href="https://www.linkedin.com/in/matthew-whytepm/" target="_blank" style="color:var(--color-accent)">Matthew Whyte</a> · Powered by the <a href="https://anthropic.com" style="color:var(--color-accent)">Claude API</a></footer>
 
   <script src="scripts/api.js"></script>
   <script src="scripts/prd.js"></script>
