@@ -86,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   copyBtn.addEventListener('click', () => {
     navigator.clipboard.writeText(lastOutput);
-    copyBtn.textContent = 'Copied!';
-    setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+    if (window.flashCopied) window.flashCopied(copyBtn, 'Copy');
   });
 });

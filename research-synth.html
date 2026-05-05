@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>(function(){try{var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>
   <title>Research Synthesizer · AI PM Toolkit</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="stylesheet" href="styles/main.css" />
@@ -51,6 +52,7 @@
           <div style="display:flex; gap: 0.75rem; align-items:center;">
             <button type="submit" id="submit-btn" class="btn btn-primary">Synthesize Research</button>
             <button type="button" id="copy-btn" class="btn btn-secondary copy-btn" style="display:none;">Copy</button>
+            <span class="kbd-hint" style="margin-left:auto;"><kbd>⌘</kbd> + <kbd>↵</kbd> to generate</span>
           </div>
         </form>
 
