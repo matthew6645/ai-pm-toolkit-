@@ -54,7 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
     submitBtn.disabled = true;
     submitBtn.textContent = thinking ? 'Thinking deeply…' : 'Synthesizing…';
     outputPanel.className = 'output-panel loading';
-    outputPanel.innerHTML = '<div class="spinner"></div> Claude is thinking…';
+    if (window.startThinking) window.startThinking(outputPanel);
+    else outputPanel.innerHTML = '<div class="spinner"></div> Claude is thinking…';
     thinkingPanel.style.display = 'none';
     thinkingBody.textContent = '';
     thinkingPanel.classList.remove('collapsed');
@@ -65,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       outputPanel.className = 'output-panel';
       const result = await callClaude(RESEARCH_SYSTEM_PROMPT, userMessage, (partial) => {
+        if (window.stopThinking) window.stopThinking(outputPanel);
         outputPanel.innerHTML = marked.parse(partial);
       }, {
         thinking,
