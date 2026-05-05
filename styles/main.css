@@ -269,6 +269,74 @@ nav {
 .shortcut-row .keys { display: inline-flex; align-items: center; gap: 0.15rem; }
 .shortcut-row kbd { margin-right: 0; }
 
+/* ── "Claude is thinking…" indicator ──────────────────── */
+.thinking-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.5rem;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+.thinking-dots { display: inline-flex; gap: 4px; align-items: center; }
+.thinking-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  animation: thinking-bounce 1.4s infinite ease-in-out;
+}
+.thinking-dots span:nth-child(2) { animation-delay: 0.18s; }
+.thinking-dots span:nth-child(3) { animation-delay: 0.36s; }
+@keyframes thinking-bounce {
+  0%, 80%, 100% { transform: scale(0.55); opacity: 0.45; }
+  40% { transform: scale(1); opacity: 1; }
+}
+.thinking-word {
+  display: inline-block;
+  min-width: 5.5rem;
+  transition: opacity 180ms ease;
+}
+
+/* ── Empty-state example preview ──────────────────────── */
+.example-preview {
+  position: relative;
+  padding: 1.5rem;
+}
+.example-preview .example-label {
+  display: block;
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-text-light);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px dashed var(--color-border);
+}
+.example-preview .example-body {
+  opacity: 0.5;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  max-height: 380px;
+  overflow: hidden;
+  position: relative;
+  user-select: none;
+}
+.example-preview .example-body::after {
+  content: "";
+  position: absolute;
+  inset: 70% 0 0 0;
+  background: linear-gradient(180deg, transparent, var(--color-surface));
+  pointer-events: none;
+}
+.example-preview .example-body h2 { font-size: 0.95rem; font-weight: 700; margin: 0.75rem 0 0.4rem; }
+.example-preview .example-body h3 { font-size: 0.875rem; font-weight: 600; margin: 0.6rem 0 0.3rem; }
+.example-preview .example-body ul { padding-left: 1.25rem; margin: 0.4rem 0 0.6rem; }
+.example-preview .example-body p { margin-bottom: 0.6rem; }
+
 main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; }
 
 footer {

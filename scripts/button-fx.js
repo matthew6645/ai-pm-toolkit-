@@ -88,6 +88,79 @@
       .catch(() => {});
   }
 
+  // ── Animated number counters ──────────────────────────
+  function initCounters() {
+    const els = document.querySelectorAll("[data-counter]");
+    if (!els.length) return;
+    if (!("IntersectionObserver" in window)) {
+      els.forEach((el) => {
+        const prefix = el.dataset.prefix || "";
+        el.textContent = prefix + el.dataset.counter;
+      });
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          observer.unobserve(el);
+          const target = parseFloat(el.dataset.counter);
+          const prefix = el.dataset.prefix || "";
+          if (!target || isNaN(target)) {
+            el.textContent = prefix + (el.dataset.counter || "0");
+            return;
+          }
+          const duration = 1100;
+          const start = performance.now();
+          function step(now) {
+            const t = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - t, 3);
+            const current = Math.round(target * eased);
+            el.textContent = prefix + current;
+            if (t < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        });
+      },
+      { threshold: 0.4 }
+    );
+    els.forEach((el) => observer.observe(el));
+  }
+
+  // ── "Claude is thinking…" indicator helpers ───────────
+  const THINKING_WORDS = ["thinking", "drafting", "polishing", "revising"];
+  window.startThinking = function (container) {
+    if (!container) return;
+    container.innerHTML =
+      '<div class="thinking-indicator">' +
+      '<span class="thinking-dots"><span></span><span></span><span></span></span>' +
+      '<span>Claude is <span class="thinking-word">thinking</span>…</span>' +
+      "</div>";
+    const wordEl = container.querySelector(".thinking-word");
+    let idx = 0;
+    container._thinkingInterval = setInterval(() => {
+      if (!container.querySelector(".thinking-word")) {
+        clearInterval(container._thinkingInterval);
+        container._thinkingInterval = null;
+        return;
+      }
+      idx = (idx + 1) % THINKING_WORDS.length;
+      wordEl.style.opacity = "0";
+      setTimeout(() => {
+        wordEl.textContent = THINKING_WORDS[idx];
+        wordEl.style.opacity = "1";
+      }, 180);
+    }, 1400);
+  };
+  window.stopThinking = function (container) {
+    if (!container) return;
+    if (container._thinkingInterval) {
+      clearInterval(container._thinkingInterval);
+      container._thinkingInterval = null;
+    }
+  };
+
   window.flashCopied = function (button, originalText) {
     if (!button) return;
     const orig = originalText != null ? originalText : button.textContent;
@@ -311,6 +384,7 @@
     initLastUpdated();
     initCommandPalette();
     initShortcutsOverlay();
+    initCounters();
   }
 
   if (document.readyState === "loading") {
