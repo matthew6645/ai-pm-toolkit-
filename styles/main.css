@@ -140,6 +140,135 @@ nav {
   color: var(--color-text-light);
 }
 
+/* ── Command palette (⌘K) ──────────────────────────────── */
+.cmdk-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 10, 18, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 14vh;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+.cmdk-backdrop.open { display: flex; opacity: 1; }
+.cmdk-panel {
+  width: min(560px, 100%);
+  max-height: 60vh;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(-8px) scale(0.98);
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cmdk-backdrop.open .cmdk-panel { transform: translateY(0) scale(1); }
+.cmdk-input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+  outline: none;
+}
+.cmdk-input::placeholder { color: var(--color-text-light); }
+.cmdk-results { flex: 1; overflow-y: auto; padding: 0.4rem 0; }
+.cmdk-section {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-light);
+  padding: 0.5rem 1.25rem 0.35rem;
+}
+.cmdk-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 1.25rem;
+  cursor: pointer;
+  font-size: 0.92rem;
+  color: var(--color-text);
+}
+.cmdk-item.selected { background: rgba(37, 99, 235, 0.1); }
+[data-theme="dark"] .cmdk-item.selected { background: rgba(96, 165, 250, 0.16); }
+.cmdk-icon { font-size: 1.05rem; flex-shrink: 0; width: 1.4rem; text-align: center; }
+.cmdk-name { flex: 1; }
+.cmdk-empty { padding: 1.5rem; text-align: center; color: var(--color-text-muted); font-size: 0.9rem; }
+.cmdk-footer {
+  display: flex;
+  gap: 1.25rem;
+  padding: 0.55rem 1.25rem;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.72rem;
+  color: var(--color-text-light);
+  flex-wrap: wrap;
+}
+.cmdk-footer kbd, .shortcut-row kbd {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.7rem;
+  padding: 1px 5px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-muted);
+  margin-right: 0.15rem;
+}
+
+/* ── Keyboard shortcuts overlay (?) ────────────────────── */
+.shortcuts-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 10, 18, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+.shortcuts-backdrop.open { display: flex; opacity: 1; }
+.shortcuts-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 1.5rem 1.75rem;
+  width: min(440px, 100%);
+  transform: scale(0.96);
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.shortcuts-backdrop.open .shortcuts-panel { transform: scale(1); }
+.shortcuts-panel h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--color-text); }
+.shortcuts-panel .shortcuts-sub { font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 1rem; }
+.shortcut-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--color-text);
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.shortcut-row:last-child { border-bottom: none; }
+.shortcut-row .keys { display: inline-flex; align-items: center; gap: 0.15rem; }
+.shortcut-row kbd { margin-right: 0; }
+
 main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; }
 
 footer {
